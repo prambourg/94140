@@ -1,6 +1,8 @@
 from flask import Blueprint, request, render_template
 from flask_babel import gettext
 from flask_pydantic import validate
+from retry import retry
+from sqlalchemy.exc import OperationalError
 
 from models.measurement import Measurement, db
 from schemas.measurement import MeasurementSchema
@@ -10,6 +12,7 @@ measurement_blueprint = Blueprint('measurement_blueprint', __name__)
 
 @measurement_blueprint.route('/measurement', methods=["POST", ])
 @validate()
+@retry(OperationalError, tries=10, delay=1)
 def measurement_create(body: MeasurementSchema):
     if request.method == "POST":
         measurement = Measurement(
@@ -17,8 +20,12 @@ def measurement_create(body: MeasurementSchema):
             temperature=body.temperature,
             humidity=body.humidity,
         )
-        db.session.add(measurement)
-        db.session.commit()
+        try:
+            db.session.add(measurement)
+            db.session.commit()
+        except Exception:
+            db.session.rollback()
+            raise
 
         return {
             "timestamp": measurement.timestamp,
@@ -28,6 +35,7 @@ def measurement_create(body: MeasurementSchema):
 
 
 @measurement_blueprint.route("/measurements", methods=["GET", ])
+@retry(OperationalError, tries=10, delay=1)
 def measurements():
     datas = Measurement.query.all()
     t = []
