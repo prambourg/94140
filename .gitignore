@@ -1,0 +1,6 @@
+/.idea
+/instance
+/mybulma
+/venv
+conf.py
+*.pyc
