@@ -6,4 +6,19 @@ tutorial_blueprint = Blueprint('tutorial_blueprint', __name__)
 
 @tutorial_blueprint.route("/python", methods=["GET", ])
 def tutorial():
-    return render_template("python.html", title=gettext('Python tutorial'))
+    return render_template("python/base.html", title=gettext('Python tutorial'))
+
+
+@tutorial_blueprint.route("/python/about", methods=["GET", ])
+def about():
+    return render_template("python/about.html", title=gettext('Python tutorial - About'))
+
+
+@tutorial_blueprint.route("/python/csv", methods=["GET", ])
+def csv():
+    return render_template("python/csv.html", title=gettext('Python tutorial - CSV'))
+
+
+@tutorial_blueprint.route("/python/retry", methods=["GET", ])
+def retry():
+    return render_template("python/retry.html", title=gettext('Python tutorial - Retry'))
