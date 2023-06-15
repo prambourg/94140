@@ -75,4 +75,3 @@ def add_props():
     add_products()
     add_baskets()
     add_purchases()
-    

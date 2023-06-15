@@ -1,4 +1,5 @@
-import os, csv
+import csv
+import os
 
 from models.base import db
 from models.measurement import Measurement
@@ -34,4 +35,3 @@ def export_measurements(delete=False):
     if delete:
         db.session.query(Measurement).delete()
         db.session.commit()
-

@@ -24,7 +24,7 @@ yt_urls = {
     "mPWqJj0YPpk": "Le gouffre cosmique : le trou noir !",
     "zn0Y8uvRqSY": "Voir les températures à distance : la caméra thermique !",
     "14XAQaNFQaM": "Super-matériau du futur : l'aérogel !",
-    "sOXTcanDIeA": "Le cœur de démon",}
+    "sOXTcanDIeA": "Le cœur de démon", }
 
 youtube_blueprint = Blueprint('youtube_blueprint', __name__)
 

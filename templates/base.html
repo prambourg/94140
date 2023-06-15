@@ -6,13 +6,13 @@
 <head>
     {% if config.ENVIRONMENT == 'prod' %}
         <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-QZ91QNVWD7"></script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ config.ANALYTICS_ID }}"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
 
-          gtag('config', 'G-QZ91QNVWD7');
+          gtag('config', {{ config.ANALYTICS_ID }});
         </script>
     {% endif %}
     <meta charset="utf-8">
@@ -23,6 +23,7 @@
         <title>{{ gettext('Home') }}</title>
     {%endif%}
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mystyles.css') }}">
+    <script src={{ config.FONT_AWESOME_URL }} crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -56,6 +57,9 @@
                             </a>
                             <a href="{{ url_for('home.camera') }}" class="navbar-item">
                                 {{ gettext('Camera') }}
+                            </a>
+                            <a href="{{ url_for('tutorial_blueprint.tutorial') }}" class="navbar-item">
+                                {{ gettext('Python') }}
                             </a>
                             <div class="navbar-item has-dropdown is-hoverable">
                                 <a class="navbar-link">

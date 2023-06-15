@@ -1,4 +1,4 @@
-from conf import DATABASE_URL, ENVIRONMENT
+from conf import ENVIRONMENT
 
 if ENVIRONMENT == "prod":
     this_file = "venv/bin/activate_this.py"
@@ -20,6 +20,7 @@ from endpoints.home import home
 from endpoints.youtube import youtube_blueprint, yt_urls
 
 application = Flask(__name__)
+application.config.from_pyfile("conf.py")
 
 
 def get_locale():
@@ -34,11 +35,7 @@ from flask_migrate import Migrate
 migrate = Migrate(application, db, compare_server_default=True)
 application.config["ENVIRONMENT"] = ENVIRONMENT
 
-if ENVIRONMENT == "prod":
-    application.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
-else:
-    application.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
-    application.config["SECRET_KEY"] = "foobar"
+
 
 db.init_app(application)
 
@@ -84,6 +81,7 @@ from endpoints.measurement import measurement_blueprint
 application.register_blueprint(measurement_blueprint)
 from endpoints.home import home
 application.register_blueprint(home)
-
+from endpoints.python import tutorial_blueprint
+application.register_blueprint(tutorial_blueprint)
 
 application.register_blueprint(youtube_blueprint)
