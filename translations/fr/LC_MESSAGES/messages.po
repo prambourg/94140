@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-06-08 00:03+0200\n"
+"POT-Creation-Date: 2023-06-16 00:22+0200\n"
 "PO-Revision-Date: 2023-06-06 13:50+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -18,36 +18,56 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.12.1\n"
 
-#: app.py:65 templates/base.html:58
+#: app.py:64 templates/base.html:61
 msgid "Camera"
 msgstr ""
 
-#: app.py:78
+#: app.py:77
 msgid "Page non trouvée"
 msgstr ""
 
-#: endpoints/measurement.py:44
+#: endpoints/measurement.py:52
 msgid "Measurement"
+msgstr ""
+
+#: endpoints/python.py:9
+msgid "Python tutorial"
+msgstr ""
+
+#: endpoints/python.py:14
+msgid "Python tutorial - About"
+msgstr ""
+
+#: endpoints/python.py:19
+msgid "Python tutorial - CSV"
+msgstr ""
+
+#: endpoints/python.py:24
+msgid "Python tutorial - Retry"
 msgstr ""
 
 #: templates/404.html:7
 msgid "404 - Page non trouvée"
 msgstr ""
 
-#: templates/base.html:23 templates/base.html:49
+#: templates/base.html:25 templates/base.html:52
 msgid "Home"
 msgstr ""
 
-#: templates/base.html:52
+#: templates/base.html:55
 msgid "CV"
 msgstr ""
 
-#: templates/base.html:55
+#: templates/base.html:58
 msgid "Mesures"
 msgstr ""
 
-#: templates/base.html:62
-msgid "More"
+#: templates/base.html:64
+msgid "Python"
+msgstr ""
+
+#: templates/base.html:68
+msgid "Youtube"
 msgstr ""
 
 #: templates/camera.html:7
@@ -58,11 +78,26 @@ msgstr ""
 msgid "Aethnight's sandbox"
 msgstr ""
 
-#: templates/measurements.html:81
+#: templates/measurements.html:77
 msgid "Hide/Show Temperatures"
 msgstr ""
 
-#: templates/measurements.html:85
+#: templates/measurements.html:81
 msgid "Hide/Show Humidity"
 msgstr ""
+
+#: templates/python/base.html:10
+msgid "General"
+msgstr ""
+
+#: templates/python/base.html:15
+msgid "A propos"
+msgstr ""
+
+#: templates/python/base.html:19
+msgid "Librairies"
+msgstr ""
+
+#~ msgid "More"
+#~ msgstr ""
 

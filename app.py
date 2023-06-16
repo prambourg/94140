@@ -58,6 +58,14 @@ def favicon():
     )
 
 
+@home.route("/ads.txt")
+def ads():
+    return send_from_directory(
+        os.path.join(application.root_path, "static"),
+        "ads.txt"
+    )
+
+
 @home.route("/camera")
 def camera():
     user_image = os.path.join('static', 'pic.jpg')

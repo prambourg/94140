@@ -4,4 +4,4 @@
 /venv
 conf.py
 *.pyc
-ads.txt
+static/ads.txt
