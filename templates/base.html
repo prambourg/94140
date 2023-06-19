@@ -26,6 +26,8 @@
     {%endif%}
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mystyles.css') }}">
     <script src={{ config.FONT_AWESOME_URL }} crossorigin="anonymous"></script>
+    {% block head %}
+    {% endblock %}
 </head>
 
 <body>
@@ -96,8 +98,6 @@
     </footer>
 </body>
 </html>
-<style>
-</style>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
   // Get all "navbar-burger" elements

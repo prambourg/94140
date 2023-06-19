@@ -5,6 +5,21 @@
 {% block article %}
       <div class="card">
         <div class="card-header"><p class="card-header-title">Retry</p></div>
-        <div class="card-content"><div class="content">TO DO</div></div>
+        <div class="card-content has-text-left">
+            <div class="content">TO DO</div>
+            <pre><code class="python">
+def all_indices(value, qlist):
+    indices = []
+    idx = -1
+    while True:
+try:
+    idx = qlist.index(value, idx+1)
+    indices.append(idx)
+except ValueError:
+    break
+return indices
+
+all_indices("foo", ["foo","bar","baz","foo"])</code></pre>
+        </div>
       </div>
 {% endblock %}
