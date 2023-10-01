@@ -7,20 +7,30 @@ if ENVIRONMENT == "prod":
 import os
 
 from flask_admin import Admin
-from flask_admin.contrib.sqla import ModelView
 from flask import Flask, send_from_directory, render_template, request
+from flask_pydantic import validate
+from retry import retry
+from sqlalchemy.exc import OperationalError
 
+from admin import AethModelView
+from admin.basket import BasketAdminView
+from admin.order import HelloAssoView
+from admin.product import ProductAdminView
+from admin.purchase import PurchaseAdminView
 from models.base import db
 from models.measurement import Measurement
 from models.basket import Basket
 from models.product import Product
 from models.purchase import Purchase
 from models.shop import Shop
+from models.cds.order import Order
 from endpoints.home import home
 from endpoints.youtube import youtube_blueprint, yt_urls
+from schemas.order import OrderSchema
 
-application = Flask(__name__)
-application.config.from_pyfile("conf.py")
+app = Flask(__name__)
+app.app_context().push()
+app.config.from_pyfile("conf.py")
 
 
 def get_locale():
@@ -28,31 +38,33 @@ def get_locale():
 
 
 from flask_babel import Babel, gettext
-babel = Babel(application, locale_selector=get_locale)
 
+babel = Babel(app, locale_selector=get_locale)
 
 from flask_migrate import Migrate
-migrate = Migrate(application, db, compare_server_default=True)
-application.config["ENVIRONMENT"] = ENVIRONMENT
 
+migrate = Migrate(app, db, compare_server_default=True)
+app.config["ENVIRONMENT"] = ENVIRONMENT
 
+db.init_app(app)
 
-db.init_app(application)
+app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
+admin = Admin(app, name="Aeth's website", template_mode='bootstrap3')
+admin.add_view(AethModelView(Measurement, db.session))
+admin.add_view(HelloAssoView(Order, db.session))
 
-application.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
-admin = Admin(application, name='microblog', template_mode='bootstrap3')
-admin.add_view(ModelView(Measurement, db.session))
-from utils.init_db import models_app
-for model in models_app:
-    admin.add_view(ModelView(model, db.session))
+admin.add_view(BasketAdminView(Basket, db.session, category="Trésorerie"))
+admin.add_view(AethModelView(Shop, db.session, category="Trésorerie"))
+admin.add_view(ProductAdminView(Product, db.session, category="Trésorerie"))
+admin.add_view(PurchaseAdminView(Purchase, db.session, category="Trésorerie"))
 
-application.config["YOUTUBE_URLS"] = [(key, value) for key, value in yt_urls.items()]
+app.config["YOUTUBE_URLS"] = [(key, value) for key, value in yt_urls.items()]
 
 
 @home.route("/favicon.ico")
 def favicon():
     return send_from_directory(
-        os.path.join(application.root_path, "static"),
+        os.path.join(app.root_path, "static"),
         "favicon.ico",
         mimetype="image/vnd.microsoft.icon",
     )
@@ -61,7 +73,7 @@ def favicon():
 @home.route("/ads.txt")
 def ads():
     return send_from_directory(
-        os.path.join(application.root_path, "static"),
+        os.path.join(app.root_path, "static"),
         "ads.txt"
     )
 
@@ -75,21 +87,63 @@ def camera():
 @home.route("/CV")
 def cv():
     return send_from_directory(
-        os.path.join(application.root_path, "static"),
+        os.path.join(app.root_path, "static"),
         "CV_Pierre_Rambourg_Fr_2023.pdf"
     )
 
 
-@application.errorhandler(404)
+@app.errorhandler(404)
 def not_found(e):
     return render_template('404.html', title=gettext('Page non trouvée'))
 
+"""from utils.hello_asso import construct
+
+
+@home.route('/hello_asso', methods=["POST", ])
+def hello_asso():
+    return {"result": construct()}"""
+
+
+@home.route('/populate_hello_asso', methods=["POST", ])
+@validate()
+@retry(OperationalError, tries=10, delay=1)
+def populate_hello_asso(body: OrderSchema):
+    if request.method == "POST" and Order.query.filter(Order.hello_asso_id == body.hello_asso_id).one_or_none() is None:
+        order = Order(
+            hello_asso_id=body.hello_asso_id,
+            first_name=body.first_name,
+            last_name=body.last_name,
+            email=body.email,
+            campagne=body.campagne,
+            type=body.type,
+            amount=body.amount,
+            date=body.date,
+            twitter=body.twitter,
+            facebook=body.facebook,
+            instagram=body.instagram,
+            url=body.url,
+            name=body.name,
+        )
+        try:
+            db.session.add(order)
+            db.session.commit()
+        except Exception:
+            db.session.rollback()
+            raise
+
+        return 201
+    else:
+        return 202
+
 
 from endpoints.measurement import measurement_blueprint
-application.register_blueprint(measurement_blueprint)
-from endpoints.home import home
-application.register_blueprint(home)
-from endpoints.python import tutorial_blueprint
-application.register_blueprint(tutorial_blueprint)
 
-application.register_blueprint(youtube_blueprint)
+app.register_blueprint(measurement_blueprint)
+from endpoints.home import home
+
+app.register_blueprint(home)
+from endpoints.python import tutorial_blueprint
+
+app.register_blueprint(tutorial_blueprint)
+
+app.register_blueprint(youtube_blueprint)

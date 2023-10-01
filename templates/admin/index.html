@@ -1,0 +1,29 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+  <p>Work to do, as add login or special operations</p>
+    <button onclick="auto_hello_asso()" type="button" class="btn btn-primary h1">Process</button>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript">
+
+ function auto_hello_asso() {
+    $.ajax({
+        url: "/hello_asso",
+        method: "POST",
+        dataType: "json",
+        contentType: "application/json"
+    })
+        .done(function (data) {
+          alert(data['result'] + " {{ kind }} have been recovered");
+    })
+        .fail(function (error) {
+          $("#error").text(error.responseJSON.error.debug)
+    })
+    }
+
+
+    </script>
+{% endblock %}
+

@@ -46,25 +46,29 @@ def add_baskets():
     b = Basket(label='test panier',
                date=date.today(),
                shop_id=shop_id)
+    b2 = Basket(label='test panier plus cher',
+               date=date.today(),
+               shop_id=shop_id)
     db.session.add(b)
+    db.session.add(b2)
     db.session.commit()
 
 
 def add_purchases():
     products = Product.query.filter().all()
-    basket_id = Basket.query.filter().first().id
+    basket = Basket.query.all()
     for product in products:
         p = Purchase(product_id=product.id,
                      price=50,
                      date=date.today(),
-                     basket_id=basket_id)
+                     basket_id=basket[0].id)
         db.session.add(p)
 
     for product in products:
         p = Purchase(product_id=product.id,
                      price=500,
                      date=date.today(),
-                     basket_id=basket_id)
+                     basket_id=basket[1].id)
         db.session.add(p)
 
     db.session.commit()

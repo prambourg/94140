@@ -1,0 +1,35 @@
+{% extends 'admin/model/details.html' %}
+{% block body %}
+    {{ super() }}
+    <script>
+    window.onload = function () {
+      var chart= new CanvasJS.Chart("chartContainer", {
+        theme: "light2",
+        title: {
+          text: "Price over time, average : " + {{ model.average_price }}
+        },
+        axisX:{
+		    title: "Time",
+            valueFormatString: "D MMM",
+		},
+        axisY: {
+          title: "Price",
+        },
+        data: [{
+          xValueType: "dateTime",
+          type: "line",
+          yValueFormatString: "##,## €",
+          dataPoints: {{ data|safe }}
+        }]
+      });
+      chart.render();
+    }
+    </script>
+
+    </script>
+    <script type="text/javascript" src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+
+
+    <div id="chartContainer" style="height: 600px; width: 100%;">
+    </div>
+{% endblock %}
