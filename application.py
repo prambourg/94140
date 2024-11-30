@@ -12,7 +12,7 @@ from endpoints.hello_asso import hello_asso_blueprint
 from endpoints.home import home
 from endpoints.measurement import measurement_blueprint
 from endpoints.python import tutorial_blueprint
-from endpoints.youtube import youtube_blueprint, yt_urls
+from endpoints.youtube import YOUTUBE_URLS, youtube_blueprint
 from models.base import User, db
 from utils.hello_asso import process_from_scratch
 
@@ -87,13 +87,13 @@ def create_app() -> Flask:  # noqa: C901, PLR0915
     db.init_app(application)
     db.create_all()
     if db.session.execute(select(User).where(User.username == "admin")).scalar_one_or_none() is None:
-        user = User(username="admin", password=os.getenv("CDS_SECRET_KEY"))  # noqa: S106
+        user = User(username="admin", password=os.getenv("CDS_SECRET_KEY", "admin"))  # noqa: S106
         db.session.add(user)
         db.session.commit()
 
     init_admin(application)
     application.config["FLASK_ADMIN_SWATCH"] = "cerulean"
-    application.config["YOUTUBE_URLS"] = list(yt_urls.items())
+    application.config["YOUTUBE_URLS"] = list(YOUTUBE_URLS.items())
 
     login_manager = LoginManager()
     login_manager.login_view = "app.login"

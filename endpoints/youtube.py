@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template
 from flask_babel import gettext
 
-yt_urls = {
+YOUTUBE_URLS = {
     "7ZdxZAfhwbA": "Voir la radioactivité avec son smartphone ?",
     "2yeNi4pWivI": "☢️ Un nouveau nuage radioactif ☢️ ? Les réseaux de mesures de la radioactivité.",
     "mFYyLVb5FpA": "Détecter les éclairs de chez soi ?",
@@ -31,12 +31,12 @@ youtube_blueprint = Blueprint("youtube_blueprint", __name__)
 
 
 @youtube_blueprint.route(
-    "/youtube/<uid>",
+    "/youtube/<uid>/",
     methods=[
         "GET",
     ],
 )
 def youtube(uid: str) -> str:
     return render_template(
-        "youtube.html", uid=uid, title=gettext(yt_urls.get(uid)),
+        "youtube.html", uid=uid, title=gettext(YOUTUBE_URLS.get(uid)),
     )
