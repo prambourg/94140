@@ -1,11 +1,9 @@
 from __future__ import annotations
 
 import datetime
-import json
 import os
 from typing import Any, Literal
 
-import requests
 from helloasso_api import HaApiV5
 from sqlalchemy import select
 

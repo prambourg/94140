@@ -3,7 +3,7 @@ from flask_admin.contrib.sqla.filters import EnumFilterInList
 from markupsafe import Markup
 from sqlalchemy import select
 
-from admin import CdsModelView
+from admin.base import CdsModelView
 from models.base import db
 from models.cds.subscription import Subscription
 

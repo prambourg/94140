@@ -4,7 +4,7 @@ from flask_admin.form import Select2Field
 from markupsafe import Markup
 from sqlalchemy import select
 
-from admin import AethModelView
+from admin.base import AethModelView
 from models.base import db
 from models.product import ProductCategory
 from models.purchase import Purchase

@@ -2,41 +2,19 @@ import os
 from logging.config import dictConfig
 
 from flask import Flask, Response, flash, redirect, render_template, request, url_for
-from flask_admin import Admin, AdminIndexView
 from flask_babel import Babel, gettext
 from flask_cors import CORS
 from flask_login import LoginManager, login_required, login_user, logout_user
 from sqlalchemy import select
 
-from admin import AethModelView
-from admin.basket import BasketAdminView
-from admin.member import (
-    Member2023ListView,
-    Member2024ListView,
-    MemberToContact2020,
-    MemberToContact2021,
-    MemberToContact2022,
-    MemberToContact2023,
-    MemberView,
-)
-from admin.product import ProductAdminView
-from admin.purchase import PurchaseAdminView
-from admin.subscription import HelloAssoView
+from admin import init_admin
 from endpoints.hello_asso import hello_asso_blueprint
 from endpoints.home import home
 from endpoints.measurement import measurement_blueprint
 from endpoints.python import tutorial_blueprint
 from endpoints.youtube import youtube_blueprint, yt_urls
 from models.base import User, db
-from models.basket import Basket
-from models.cds.member import Member
-from models.cds.subscription import Subscription
-from models.measurement import Measurement
-from models.product import Product
-from models.purchase import Purchase
-from models.shop import Shop
 from utils.hello_asso import process_from_scratch
-from utils.strings import CDS_CATEGORY, TRESORERY_CATEGORY, WEBSITE_NAME
 
 DATABASES = {}
 if "RDS_HOSTNAME" in os.environ:
@@ -88,7 +66,6 @@ def create_app() -> Flask:  # noqa: C901, PLR0915
     application.app_context().push()
 
     CORS(application, resources={r"/*": {"origins": "*"}})
-
     Babel(application, locale_selector=get_locale)
 
     application.config["ENVIRONMENT"] = os.getenv("ENVIRONMENT")
@@ -110,98 +87,12 @@ def create_app() -> Flask:  # noqa: C901, PLR0915
     db.init_app(application)
     db.create_all()
     if db.session.execute(select(User).where(User.username == "admin")).scalar_one_or_none() is None:
-        user = User(username="admin", password="admin")  # noqa: S106
+        user = User(username="admin", password=os.getenv("CDS_SECRET_KEY"))  # noqa: S106
         db.session.add(user)
         db.session.commit()
 
+    init_admin(application)
     application.config["FLASK_ADMIN_SWATCH"] = "cerulean"
-    admin = Admin(
-        application,
-        name=WEBSITE_NAME,
-        template_mode="bootstrap3",
-        index_view=AdminIndexView(
-            name=WEBSITE_NAME,
-            template="index.html",
-            url="/",
-        ),
-    )
-
-    admin.add_view(AethModelView(Measurement, db.session, category=TRESORERY_CATEGORY))
-    admin.add_view(BasketAdminView(Basket, db.session, category=TRESORERY_CATEGORY))
-    admin.add_view(AethModelView(Shop, db.session, category=TRESORERY_CATEGORY))
-    admin.add_view(ProductAdminView(Product, db.session, category=TRESORERY_CATEGORY))
-    admin.add_view(PurchaseAdminView(Purchase, db.session, category=TRESORERY_CATEGORY))
-    admin.add_view(
-        HelloAssoView(
-            Subscription,
-            db.session,
-            name="Historique adhésions",
-            category=CDS_CATEGORY,
-        ),
-    )
-    admin.add_view(
-        Member2023ListView(
-            Member,
-            db.session,
-            name="Liste des membres publique 2023",
-            endpoint="liste_membres_2023",
-            category=CDS_CATEGORY,
-        ),
-    )
-    admin.add_view(
-        Member2024ListView(
-            Member,
-            db.session,
-            name="Liste des membres publique 2024",
-            endpoint="liste_membre",
-            category=CDS_CATEGORY,
-        ),
-    )
-    admin.add_view(
-        MemberView(
-            Member,
-            db.session,
-            name="Liste des membres détaillée",
-            category=CDS_CATEGORY,
-        ),
-    )
-    admin.add_view(
-        MemberToContact2023(
-            Member,
-            db.session,
-            name="A relancer 2023",
-            endpoint="membresRelance2023",
-            category=CDS_CATEGORY,
-        ),
-    )
-    admin.add_view(
-        MemberToContact2022(
-            Member,
-            db.session,
-            name="A relancer 2022",
-            endpoint="membresRelance2022",
-            category=CDS_CATEGORY,
-        ),
-    )
-    admin.add_view(
-        MemberToContact2021(
-            Member,
-            db.session,
-            name="A relancer 2021",
-            endpoint="membresRelance2021",
-            category=CDS_CATEGORY,
-        ),
-    )
-    admin.add_view(
-        MemberToContact2020(
-            Member,
-            db.session,
-            name="A relancer 2020",
-            endpoint="membresRelance2020",
-            category=CDS_CATEGORY,
-        ),
-    )
-    admin._menu = admin._menu[1:]  # noqa: SLF001
     application.config["YOUTUBE_URLS"] = list(yt_urls.items())
 
     login_manager = LoginManager()

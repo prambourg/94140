@@ -8,7 +8,7 @@ from flask_sqlalchemy.query import Query
 from markupsafe import Markup
 from sqlalchemy import func, select
 
-from admin import CdsModelView
+from admin.base import CdsModelView
 from models.base import db
 from models.cds.member import Member
 from models.cds.subscription import Subscription
