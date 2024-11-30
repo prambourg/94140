@@ -1,0 +1,49 @@
+<!-- templates/python/info.html -->
+
+{% extends "python/base.html" %}
+
+{% block article %}
+      <div class="card">
+        <div class="card-header"><p class="card-header-title">Retry</p></div>
+        <div class="card-content has-text-justified">
+            <div class="content">
+            <p>
+                <code>retry</code> est une librairie développée par invl disponible sur <a href="https://github.com/invl/retry">Github</a> et disponible via pip.
+                Non maintenue depuis 2016, elle peut être considérée comme dépreciée mais apporte une fonctionnalité pratique très facilement.
+                Lors de la récupération de ressources internes ou externes, il peut toujours y a voir un risque que celles-ci soient indisponibles. La librairie <code>retry</code>
+                permet ainsi de recommencer une opération avec une liberté sur le nombre d'essais et le délai entre chaque.
+            </p>
+            <pre><code class="shell">$ pip install retry</code></pre>
+            <p>
+                Utilisée en décorateur, elle permet de relancer une fonction si-celle lève une exception. Plusieurs paramètres permettent de modifier son comportement :
+                <ul>
+                    <li><code>exceptions</code> : l'exception ou un tuple d'exception qui provoque le nouvel essai. Défaut : Exception.</li>
+                    <li><code>tries</code> : le nombre maximal d'essais. Défaut : -1 (infinité d'essai).</li>
+                    <li><code>delay</code> : délai initial entre les essais. Défaut : 0(s).</li>
+                    <li><code>max_delay</code> : délai maximal entre les essais. Défaut : None (pas de limite)</li>
+                    <li><code>backoff</code> : le facteur appliqué au temps d'attente entre chaque essai. Défaut : 1 (pas d'augmentation)</li>
+                    <li><code>jitter</code> : Le temps d'attente ajouté en chaque essai. Ce peut être un nombre fixe ou un random entre un tuple de 2 valeurs (min, max). Défault : 0 (pas d'augmentation)</li>
+                    <li><code>logger</code> : lo logger utilisé lors des échecs, désactivé si None. Default : retry.logging_logger.</li>
+                </ul>
+            </p>
+            <pre><code class="python">from retry import retry
+
+@retry(exceptions=Exception, tries=-1, delay=0, max_delay=None, backoff=1, jitter=0, logger=logging_logger)
+def foobar():
+    ...
+    flaky stuff
+    ...</code></pre>
+            <p>
+                Il est aussi possible d'utiliser une fonction au lieu d'un décorateur avec la fonction à éxécuter en argument.
+            </p>
+            <pre><code class="python">from retry import retry_call
+
+def foobar():
+    ...
+    retry_call(f, fargs=None, fkwargs=None, exceptions=Exception, tries=-1, delay=0, max_delay=None, backoff=1,
+               jitter=0,
+               logger=logging_logger)</code></pre>
+            </div>
+        </div>
+      </div>
+{% endblock %}

@@ -1,0 +1,58 @@
+<!-- templates/python/python.html -->
+
+{% extends "base.html" %}
+
+{% block head %}
+    <link rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+{% endblock %}
+
+{% block content %}
+<section class="main-content columns is-fullheight is-light">
+
+<aside class="menu">
+  <p class="menu-label">
+    {{ gettext('General') }}
+  </p>
+  <ul class="menu-list">
+    <li><a href="{{ url_for('tutorial_blueprint.about') }}">
+        <span class="icon"><i class="fa fa-info"></i></span>
+        {{ gettext('A propos')}}
+    </a></li>
+  </ul>
+  <p class="menu-label">
+      {{ gettext('Librairies') }}
+  </p>
+  <ul class="menu-list">
+    <li><a href="{{ url_for('tutorial_blueprint.csv') }}">
+        <span class="icon"><i class="fa-solid fa-file-csv"></i></span>
+        CSV
+    </a></li>
+    <li><a href="{{ url_for('tutorial_blueprint.retry') }}">
+        <span class="icon"><i class="fa-solid fa-rotate-left"></i></span>
+        Retry
+    </a></li>
+  </ul>
+</aside>
+
+  <div class="container column is-10">
+    <div class="section">
+        {% block article %}
+        {% endblock %}
+
+    </div>
+  </div>
+
+</section>
+
+<style>
+.hero.is-fullheight .hero-body {
+    align-items: flex-start;
+}
+pre{
+    background-color: rgb(240, 240, 240);
+}
+</style>
+{% endblock %}

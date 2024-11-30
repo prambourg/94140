@@ -1,0 +1,14 @@
+<!-- templates/camera.html -->
+
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="title">
+  {{ title }}
+</h1>
+<h2 class="subtitle">
+<br>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ uid }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+</h2>
+
+{% endblock %}

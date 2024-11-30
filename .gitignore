@@ -1,0 +1,18 @@
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+
+venv
+.venv
+.virt
+virt
+.pytest_cache
+__pycache__
+htmlcov
+logs
+instance
+.vscode
+.coverage
+.env

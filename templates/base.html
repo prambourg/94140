@@ -1,0 +1,132 @@
+<!-- templates/base.html -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    {% if config.ENVIRONMENT == 'prod' %}
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ config.ANALYTICS_ID }}"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', '{{ config.ANALYTICS_ID }}');
+        </script>
+    {% endif %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% if title %}
+         <title>{{ title }}</title>
+    {%else%}
+        <title>{{ gettext('Home - AWS') }}</title>
+    {%endif%}
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+    >
+    <script src={{ config.FONT_AWESOME_URL }} crossorigin="anonymous"></script>
+    {% block head %}
+    {% endblock %}
+</head>
+
+<body>
+    <section class="hero is-light is-fullheight">
+
+        <div class="hero-head">
+            <nav class="navbar">
+                <div class="container">
+
+                      <div class="navbar-brand">
+                          <a class="navbar-item" href="/">
+                              <img src="{{ url_for('static', filename='favicon.ico') }}" width="48" height="48">
+                          </a>
+                          <div role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="mainNavbar">
+                              <span aria-hidden="true"></span>
+                              <span aria-hidden="true"></span>
+                              <span aria-hidden="true"></span>
+                          </div>
+                      </div>
+
+                    <div id="mainNavbar" class="navbar-menu">
+                        <div class="navbar-start">
+                            <a href="{{ url_for('home.index') }}" class="navbar-item">
+                                {{ gettext('Home') }}
+                            </a>
+                            <a href="{{ url_for('home.cv') }}" class="navbar-item">
+                                {{ gettext('CV') }}
+                            </a>
+                            <a href="{{ url_for('measurement_blueprint.measurements') }}" class="navbar-item">
+                                {{ gettext('Mesures') }}
+                            </a>
+                            <a href="{{ url_for('home.camera') }}" class="navbar-item">
+                                {{ gettext('Camera') }}
+                            </a>
+                            <a href="{{ url_for('tutorial_blueprint.tutorial') }}" class="navbar-item">
+                                {{ gettext('Python') }}
+                            </a>
+                            <div class="navbar-item has-dropdown is-hoverable">
+                                <a class="navbar-link">
+                                    {{ gettext('Youtube') }}
+                                </a>
+
+                                <div class="navbar-dropdown">
+                                    {%  for url in config.YOUTUBE_URLS %}
+                                    <a class="navbar-item" href="{{ url_for('youtube_blueprint.youtube', uid=url[0]) }}">
+                                        {{ url[1] }}
+                                    </a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% if current_user.is_authenticated %}
+                                <a href="{{ url_for('logout') }}" class="navbar-item">
+                                {{ gettext('Logout') }}
+                                </a>
+                            {% else %}
+                                <a href="{{ url_for('login') }}" class="navbar-item">
+                                {{ gettext('Login') }}
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <div class="hero-body">
+            <div class="container has-text-centered">
+               {% block content %}
+               {% endblock %}
+            </div>
+        </div>
+    </section>
+    <footer class="footer hero is-light">
+        <div class="content has-text-centered">
+            {{ gettext('Done with Flask!')}}
+        </div>
+    </footer>
+</body>
+</html>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+  // Get all "navbar-burger" elements
+  const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+  // Add a click event on each of them
+  $navbarBurgers.forEach( el => {
+    el.addEventListener('click', () => {
+
+      // Get the target from the "data-target" attribute
+      const target = el.dataset.target;
+      const $target = document.getElementById(target);
+
+      // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+      el.classList.toggle('is-active');
+      $target.classList.toggle('is-active');
+
+    });
+  });
+
+});
+</script>

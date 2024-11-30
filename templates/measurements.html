@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+<head>
+<script type="text/javascript">
+window.onload = function () {
+	var chart = new CanvasJS.Chart("chartContainer",{
+		animationEnabled: true,
+		zoomEnabled: true,
+		zoomType: "xy",
+		title:{
+			text: "Temperature - Humidity"
+		},
+		axisX:{
+			title: "Time",
+            valueFormatString: "D MMM Y H'h'mm",
+		},
+		axisY:{
+			title: "Temperature",
+			lineColor: "#369EAD",
+			titleFontColor: "#369EAD",
+			labelFontColor: "#369EAD",
+		},
+		axisY2:{
+			title: "Humidity",
+			lineColor: "#B6032C",
+			titleFontColor: "#B6032C",
+			labelFontColor: "#B6032C",
+		},
+	data: [
+	{
+		xValueType: "dateTime",
+		type: "spline",
+		showInLegend: true,
+		name: "Temperature",
+		dataPoints: {{ temperatures|safe }},
+		color: "#369EAD",
+		xValueFormatString: "D MMM Y H'h'mm",
+		yValueFormatString: "####.# °C",
+	},
+	{
+		xValueType: "dateTime",
+		type: "spline",
+		showInLegend: true,                  	
+		axisYType: "secondary",
+		name: "Humidity",
+		dataPoints: {{ humidities|safe }},
+		color: "#B6032C",
+		xValueFormatString: "D MMM Y H'h'mm",
+		yValueFormatString: "####.# °",
+	}
+	]
+	});
+
+	chart.render();
+
+     document.getElementById("button1").onclick =  function(){
+         chart.options.data[0].visible = !chart.options.data[0].visible;
+         chart.render();
+     };
+
+    document.getElementById("button2").onclick =  function(){
+        chart.options.data[1].visible = !chart.options.data[1].visible;
+        chart.render();
+    };
+}
+</script>
+<script type="text/javascript" src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+</head>
+<body>
+<div>
+    Last measurement {{ temperatures[-1]['y'] }}°C and {{ humidities[-1]['y'] }}%.
+</div>
+<div id="chartContainer" style="height: 600px; width: 100%;">
+</div>
+<button class="button" id="button1">
+    {{ gettext('Hide/Show Temperatures')  }}
+</button>
+
+<button class="button" id="button2">
+    {{ gettext('Hide/Show Humidity') }}
+</button>
+</body>
+
+{% endblock %}
