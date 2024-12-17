@@ -9,7 +9,8 @@ class Campagne(Enum):
     _2021 = 1, "2021"
     _2022 = 2, "2022"
     _2023 = 3, "2023"
-    _2024 = 4, "2023"
+    _2024 = 4, "2024"
+    _2025 = 5, "2025"
 
     def __le__(self, other: Enum) -> bool:
         return self.value[0] <= other.value[0]

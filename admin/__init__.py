@@ -6,6 +6,7 @@ from admin.basket import BasketAdminView
 from admin.member import (
     Member2023ListView,
     Member2024ListView,
+    Member2025ListView,
     MemberToContact2020,
     MemberToContact2021,
     MemberToContact2022,
@@ -66,6 +67,15 @@ def init_admin(app: Flask) -> None:
             db.session,
             name="Liste des membres publique 2024",
             endpoint="liste_membre",
+            category=CDS_CATEGORY,
+        ),
+    )
+    admin.add_view(
+        Member2025ListView(
+            Member,
+            db.session,
+            name="Liste des membres publique 2025",
+            endpoint="liste_membres_2025",
             category=CDS_CATEGORY,
         ),
     )

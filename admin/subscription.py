@@ -43,6 +43,7 @@ CAMPAGNES_YEAR = {
     "rattrapage-adhesion-2022": "2022",
     "cotisation-2023-au-cafe-des-sciences": "2023",
     "cotisation-2024-au-cafe-des-sciences": "2024",
+    "cotisation-2025-au-cafe-des-sciences": "2025",
 }
 
 

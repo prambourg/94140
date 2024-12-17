@@ -137,6 +137,7 @@ class Member(BaseModel):
             "2022": 2,
             "2023": 3,
             "2024": 4,
+            "2025": 5,
         }
 
         def foo(elem: Subscription) -> int:

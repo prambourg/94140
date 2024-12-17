@@ -200,6 +200,18 @@ class Member2024ListView(Member2023ListView):
         )
 
 
+class Member2025ListView(Member2023ListView):
+    @staticmethod
+    def get_query() -> Query:
+        return (
+            Member.query.join(
+                Subscription, Subscription.member_id == Member.id,
+            )
+            .filter(Subscription.campagne == "2025")
+            .filter(Member.confirmed_departure.is_(False))
+        )
+
+
 class MemberToContact2022(CdsModelView):
     column_list = (
         "name",
