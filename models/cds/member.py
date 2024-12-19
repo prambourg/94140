@@ -93,9 +93,13 @@ class Member(BaseModel):
     @property
     def up_to_date(self) -> bool:
         return (
-            any("2024" in s.campagne for s in self.subscriptions)
+            any("2025" in s.campagne for s in self.subscriptions)
             or self.confirmed_departure
         )
+
+    @property
+    def is_2024(self) -> bool:
+        return any("2024" in s.campagne for s in self.subscriptions)
 
     @property
     def is_2023(self) -> bool:
