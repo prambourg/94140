@@ -20,4 +20,4 @@ def test_seven_days_before_none() -> None:
     before_default_value = datetime.datetime.now(tz=TIMEZONE) - datetime.timedelta(days=7)
     default_value = seven_days_before()
     after_default_value = datetime.datetime.now(tz=TIMEZONE)
-    assert before_default_value < default_value < after_default_value
+    assert before_default_value <= default_value <= after_default_value
