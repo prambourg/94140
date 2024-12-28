@@ -22,7 +22,7 @@ def camera() -> str:
 @home.route("/CV")
 def cv() -> Response:
     return send_from_directory(
-        Path(current_app.root_path) / "static", "CV_Pierre_Rambourg_Fr_2023.pdf",
+        Path(current_app.root_path) / "static", "CV_Pierre_Rambourg.pdf",
     )
 
 
