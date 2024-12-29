@@ -1,0 +1,16 @@
+# To get started with Dependabot version updates, you'll need to specify which
+# package ecosystems to update and where the package manifests are located.
+# Please see the documentation for all configuration options:
+# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  - package-ecosystem: "pip" # Pour les projets Python
+    directory: "/" # Emplacement du fichier pyproject.toml
+    schedule:
+      interval: "weekly" # Mise à jour hebdomadaire
+      day: "monday" # Lancement des mises à jour tous les lundis
+      time: "08:00" # Heure d'exécution
+      timezone: "Europe/Paris" # Fuseau horaire pour l'exécution
+    commit-message:
+      prefix: "deps" # Préfixe pour les messages de commit
