@@ -5,7 +5,7 @@ tutorial_blueprint = Blueprint("tutorial_blueprint", __name__)
 
 
 @tutorial_blueprint.route(
-    "/python",
+    "/python/",
     methods=[
         "GET",
     ],
@@ -17,7 +17,7 @@ def tutorial() -> str:
 
 
 @tutorial_blueprint.route(
-    "/python/about",
+    "/python/about/",
     methods=[
         "GET",
     ],
@@ -29,7 +29,7 @@ def about() -> str:
 
 
 @tutorial_blueprint.route(
-    "/python/csv",
+    "/python/csv/",
     methods=[
         "GET",
     ],
@@ -41,7 +41,7 @@ def csv() -> str:
 
 
 @tutorial_blueprint.route(
-    "/python/retry",
+    "/python/retry/",
     methods=[
         "GET",
     ],
