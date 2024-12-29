@@ -11,7 +11,7 @@ def index() -> str:
     return render_template("index.html")
 
 
-@home.route("/camera")
+@home.route("/camera/")
 def camera() -> str:
     user_image = Path("static") / "pic.jpg"
     return render_template(
@@ -19,7 +19,7 @@ def camera() -> str:
     )
 
 
-@home.route("/CV")
+@home.route("/CV/")
 def cv() -> Response:
     return send_from_directory(
         Path(current_app.root_path) / "static", "CV_Pierre_Rambourg.pdf",
