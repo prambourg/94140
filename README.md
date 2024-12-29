@@ -1,3 +1,5 @@
+[![CodeQL](https://github.com/prambourg/94140/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/prambourg/94140/actions/workflows/github-code-scanning/codeql)[![Dependabot Updates](https://github.com/prambourg/94140/actions/workflows/dependabot/dependabot-updates/badge.svg)](https://github.com/prambourg/94140/actions/workflows/dependabot/dependabot-updates)[![Run Unit Tests](https://github.com/prambourg/94140/actions/workflows/pytest.yml/badge.svg)](https://github.com/prambourg/94140/actions/workflows/pytest.yml)
+
 # 94140 Website
 
 Ce repo contient le code source de https://www.94140.fr. C'est à la fois un bac à sable, une présentation de mes compétences et un bloc note.
