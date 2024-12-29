@@ -1,0 +1,17 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.12
+
+  pre_build:
+    commands:
+      - python -m pip install --upgrade pip
+      - pip install uv
+      - uv sync
+
+  build:
+    commands:
+      - echo Running tests with uv...
+      - uv run pytest
