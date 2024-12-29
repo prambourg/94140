@@ -65,7 +65,7 @@ markupsafe==3.0.2
     #   wtforms
 mdurl==0.1.2
     # via markdown-it-py
-oauthlib==3.1.1
+oauthlib==3.2.2
     # via
     #   helloasso-apiv5
     #   requests-oauthlib
