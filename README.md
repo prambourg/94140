@@ -5,7 +5,7 @@ Ce repo contient le code source de https://www.94140.fr. C'est à la fois un bac
 Contient également la gestion des membres du Café des Sciences
 
 # Commandes utiles
-
+## AWS
 Quelques commandes utiles dans un environnement AWS  
 Après aws cli d'installé, actualiser les identifiants :
 > aws sso login  
@@ -38,3 +38,10 @@ load env var en SSH pour les avoir et pouvoir lancer un shell flask:
 
 Pour réduire à une instance AWS et éviter des coûts trop importants :
 > Rolling update type -> disabled
+
+## Utilisation d'UV
+Créer l'environnement virtuel depuis un uv.lock :
+> uv sync
+
+Lancer pytest avec l'environnement créé précédemment
+> uv run pytest
