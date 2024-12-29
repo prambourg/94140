@@ -45,3 +45,23 @@ Créer l'environnement virtuel depuis un uv.lock :
 
 Lancer pytest avec l'environnement créé précédemment
 > uv run pytest
+
+## Utilisation de Git
+Créer et changer de branche
+> git checkout -b <branch_name>
+
+Changer de branche
+> git checkout <branch_name>
+
+Supprimer une branche locale :
+> git branch -d <branch_name>
+
+Supprimer une branche distance :
+> git branch -D <branch_name>
+
+Actualiser la liste des branches distantes, par exemple après en avoir supprimé :
+> git remote update origin --prune
+
+Modifier les n derniers commits d'une branche (exemple pour les squash)
+> git rebase -i HEAD~n  
+> git push -f
