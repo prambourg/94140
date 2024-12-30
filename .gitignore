@@ -15,3 +15,4 @@ instance
 .vscode
 .coverage
 .env
+.mypy_cache
