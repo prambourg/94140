@@ -1,7 +1,7 @@
 import os
 from logging.config import dictConfig
 
-from flask import Flask, Response, flash, redirect, render_template, request, url_for
+from flask import Flask, Response, flash, redirect, render_template, request, send_from_directory, url_for
 from flask_babel import Babel, gettext
 from flask_cors import CORS
 from flask_login import LoginManager, login_required, login_user, logout_user
@@ -32,7 +32,7 @@ def get_locale() -> str:
     return request.accept_languages.best_match(["de", "fr", "en"])
 
 
-def create_app() -> Flask:  # noqa: C901, PLR0915
+def create_app() -> Flask:  # noqa: C901
     dictConfig(
             {
     "version": 1,
@@ -87,7 +87,7 @@ def create_app() -> Flask:  # noqa: C901, PLR0915
     db.init_app(application)
     db.create_all()
     if db.session.execute(select(User).where(User.username == "admin")).scalar_one_or_none() is None:
-        user = User(username="admin", password=os.getenv("CDS_SECRET_KEY", "admin"))  # noqa: S106
+        user = User(username="admin", password=os.getenv("CDS_SECRET_KEY", "admin"))
         db.session.add(user)
         db.session.commit()
 
@@ -145,6 +145,14 @@ def create_app() -> Flask:  # noqa: C901, PLR0915
     def get_process_from_scratch() -> Response:
         process_from_scratch()
         return redirect(url_for("home.index"))
+
+    @application.route("/favicon.ico")
+    def favicon() -> Response:
+        return send_from_directory(
+            directory=application.static_folder,
+            path="favicon.ico",
+            mimetype="image/vnd.microsoft.icon",
+        )
 
     application.register_blueprint(measurement_blueprint)
     application.register_blueprint(home)
