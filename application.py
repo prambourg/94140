@@ -1,11 +1,13 @@
 import os
 from logging.config import dictConfig
+from pathlib import Path
 
-from flask import Flask, Response, flash, redirect, render_template, request, send_from_directory, url_for
+from flask import Flask, flash, redirect, render_template, request, send_from_directory, url_for
 from flask_babel import Babel, gettext
 from flask_cors import CORS
 from flask_login import LoginManager, login_required, login_user, logout_user
 from sqlalchemy import select
+from werkzeug import Response
 
 from admin import init_admin
 from cds.endpoints.hello_asso import hello_asso_blueprint
@@ -28,7 +30,7 @@ if "RDS_HOSTNAME" in os.environ:
     }
 
 
-def get_locale() -> str:
+def get_locale() -> str | None:
     return request.accept_languages.best_match(["de", "fr", "en"])
 
 
@@ -149,7 +151,7 @@ def create_app() -> Flask:  # noqa: C901
     @application.route("/favicon.ico")
     def favicon() -> Response:
         return send_from_directory(
-            directory=application.static_folder,
+            directory=application.static_folder or Path("static"),
             path="favicon.ico",
             mimetype="image/vnd.microsoft.icon",
         )

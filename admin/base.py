@@ -6,7 +6,8 @@ class AethModelView(ModelView):
     can_view_details = True
     page_size = 100
 
-    def is_accessible(self) -> bool:
+    @staticmethod
+    def is_accessible() -> bool:
         return (
             current_user.is_authenticated
             and current_user.username == "admin"
@@ -14,5 +15,6 @@ class AethModelView(ModelView):
 
 
 class CdsModelView(AethModelView):
-    def is_accessible(self) -> bool:
+    @staticmethod
+    def is_accessible() -> bool:
         return current_user.is_authenticated
