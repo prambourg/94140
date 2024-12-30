@@ -1,7 +1,7 @@
 from flask.testing import FlaskClient
 from sqlalchemy.orm.scoping import scoped_session
 
-from models.cds.subscription import Subscription
+from cds.models.subscription import Subscription
 from tests.conftest import htmlify
 from utils.strings import ACCESS_DENIED, CDS_CATEGORY, WEBSITE_NAME
 

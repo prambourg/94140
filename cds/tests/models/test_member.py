@@ -1,8 +1,8 @@
 import pytest
 from sqlalchemy.orm.scoping import scoped_session
 
-from models.cds.member import Member, reconciliation
-from models.cds.subscription import Subscription
+from cds.models.member import Member, reconciliation
+from cds.models.subscription import Subscription
 
 sub_base = {
     "first_name": "Pierre",

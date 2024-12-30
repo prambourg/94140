@@ -4,8 +4,8 @@ from markupsafe import Markup
 from sqlalchemy import select
 
 from admin.base import CdsModelView
+from cds.models.subscription import Subscription
 from models.base import db
-from models.cds.subscription import Subscription
 
 CAMPAGNES = (
     (("valider-l-adhesion-au-cafe-des-sciences",), "pré_2020"),

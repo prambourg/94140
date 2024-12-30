@@ -7,10 +7,10 @@ from typing import Any, Literal
 from helloasso_api import HaApiV5
 from sqlalchemy import select
 
-from admin.subscription import CAMPAGNES_YEAR
+from cds.admin.subscription import CAMPAGNES_YEAR
+from cds.models.member import Member, reconciliation
+from cds.models.subscription import Subscription
 from models.base import db
-from models.cds.member import Member, reconciliation
-from models.cds.subscription import Subscription
 
 if os.getenv("ENVIRONMENT") is not None:
     hello_asso_api = HaApiV5(
