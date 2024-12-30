@@ -4,8 +4,8 @@ import os
 from flask.testing import FlaskClient
 from sqlalchemy.orm.scoping import scoped_session
 
-from models.cds.member import Member
-from models.cds.subscription import Subscription
+from cds.models.member import Member
+from cds.models.subscription import Subscription
 
 payload = {
   "data": {

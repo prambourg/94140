@@ -1,7 +1,7 @@
 from sqlalchemy import func, select
 
+from cds.models.subscription import Subscription
 from models.base import BaseModel, db
-from models.cds.subscription import Subscription
 
 
 def reconciliation() -> None:
@@ -24,7 +24,7 @@ def reconciliation() -> None:
                  ).scalars().first()
         if member is not None:
             print(
-                f"{subscription.first_name} {subscription.last_name} found !"
+                f"{subscription.first_name} {subscription.last_name} found !",
             )
 
         if member is None:

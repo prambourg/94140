@@ -3,7 +3,9 @@ from flask_admin import Admin, AdminIndexView
 
 from admin.base import AethModelView
 from admin.basket import BasketAdminView
-from admin.member import (
+from admin.product import ProductAdminView
+from admin.purchase import PurchaseAdminView
+from cds.admin.member import (
     Member2023ListView,
     Member2024ListView,
     Member2025ListView,
@@ -13,13 +15,11 @@ from admin.member import (
     MemberToContact2023,
     MemberView,
 )
-from admin.product import ProductAdminView
-from admin.purchase import PurchaseAdminView
-from admin.subscription import HelloAssoView
+from cds.admin.subscription import HelloAssoView
+from cds.models.member import Member
+from cds.models.subscription import Subscription
 from models.base import db
 from models.basket import Basket
-from models.cds.member import Member
-from models.cds.subscription import Subscription
 from models.measurement import Measurement
 from models.product import Product
 from models.purchase import Purchase

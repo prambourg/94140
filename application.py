@@ -8,7 +8,7 @@ from flask_login import LoginManager, login_required, login_user, logout_user
 from sqlalchemy import select
 
 from admin import init_admin
-from endpoints.hello_asso import hello_asso_blueprint
+from cds.endpoints.hello_asso import hello_asso_blueprint
 from endpoints.home import home
 from endpoints.measurement import measurement_blueprint
 from endpoints.python import tutorial_blueprint

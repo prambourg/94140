@@ -9,9 +9,9 @@ from markupsafe import Markup
 from sqlalchemy import func, select
 
 from admin.base import CdsModelView
+from cds.models.member import Member
+from cds.models.subscription import Subscription
 from models.base import db
-from models.cds.member import Member
-from models.cds.subscription import Subscription
 
 
 class MemberView(CdsModelView):
