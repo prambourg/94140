@@ -8,8 +8,8 @@ from retry import retry
 from sqlalchemy.exc import OperationalError
 
 from cds.models.member import reconciliation
+from cds.utils.hello_asso import create_subscription
 from models.base import db
-from utils.hello_asso import create_subscription
 
 hello_asso_blueprint = Blueprint("hello_asso_blueprint", __name__)
 

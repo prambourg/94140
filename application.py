@@ -9,12 +9,12 @@ from sqlalchemy import select
 
 from admin import init_admin
 from cds.endpoints.hello_asso import hello_asso_blueprint
+from cds.utils.hello_asso import process_from_scratch
 from endpoints.home import home
 from endpoints.measurement import measurement_blueprint
 from endpoints.python import tutorial_blueprint
 from endpoints.youtube import YOUTUBE_URLS, youtube_blueprint
 from models.base import User, db
-from utils.hello_asso import process_from_scratch
 
 DATABASES = {}
 if "RDS_HOSTNAME" in os.environ:
