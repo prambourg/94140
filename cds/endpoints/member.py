@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from flask import Blueprint, Response, jsonify, request
+from flask import Blueprint, Response, current_app, jsonify, request
 from sqlalchemy import func, select
 
 from cds.models.member import Member
@@ -46,7 +46,8 @@ def get_members() -> tuple[Response, int]:
         members = db.session.execute(stmt).scalars().all()
         total_members = db.session.execute(select(func.count()).select_from(Member)).scalar()
     except Exception as e:  # noqa: BLE001
-        return jsonify({"error": "Internal server error", "details": str(e)}), 500
+        current_app.logger.exception("An error occurred while retrieving members: %s", str(e))
+        return jsonify({"error": "Internal server error"}), 500
 
     return jsonify({
         "members": members,
