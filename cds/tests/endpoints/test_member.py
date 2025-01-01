@@ -8,9 +8,10 @@ from sqlalchemy.orm.scoping import scoped_session
         [
             (None, None, 5),
             (0, 0, 0),
-            (2, 0, 3),
-            (2, 2, 1),
-            (0, 5, 0),
+            (2, None, 2),
+            (None, 3, 2),
+            (3, 1, 3),
+            (5, 4, 1),
         ])
 def test_get_members(
     client: FlaskClient,
