@@ -2,7 +2,7 @@ import pytest
 from sqlalchemy.orm.scoping import scoped_session
 
 from cds.models.member import Member
-from tests.conftest import app, session
+from tests.conftest import app, login_as_admin, login_as_user, session
 
 
 @pytest.fixture
