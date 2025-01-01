@@ -13,7 +13,11 @@ intpk = Annotated[int, mapped_column(primary_key=True)]
 class BaseModel(db.Model):
     __abstract__ = True
 
-    def row2dict(self) -> dict[str, str]:
+    def row2dict(self, *args: str) -> dict[str, str]:
+        if args:
+            return {
+                column: str(getattr(self, column)) for column in args
+            }
         return {
             c.name: str(getattr(self, c.name)) for c in self.__table__.columns
         }
