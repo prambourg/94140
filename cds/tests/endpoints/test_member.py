@@ -4,21 +4,22 @@ from sqlalchemy.orm.scoping import scoped_session
 
 
 @pytest.mark.parametrize(
-        ("limit", "offset", "expected"),
+        ("limit", "offset", "expected", "length"),
         [
-            (None, None, 5),
-            (0, 0, 0),
-            (2, None, 2),
-            (None, 3, 2),
-            (3, 1, 3),
-            (5, 4, 1),
+            (None, None, {"limit": None, "offset": None, "total": 5}, 5),
+            (0, 0, {"limit": 0, "offset": 0, "total": 5}, 0),
+            (2, None, {"limit": 2, "offset": None, "total": 5}, 2),
+            (None, 3, {"limit": None, "offset": 3, "total": 5}, 2),
+            (3, 1, {"limit": 3, "offset": 1, "total": 5}, 3),
+            (5, 4, {"limit": 5, "offset": 4, "total": 5}, 1),
         ])
 def test_get_members(
     client: FlaskClient,
     session_with_members: scoped_session,
     limit: str,
     offset: str | None,
-    expected: int | None,
+    expected: dict[str, int | None],
+    length: int,
 ) -> None:
     url = "/members/?"
     if limit is not None:
@@ -32,7 +33,33 @@ def test_get_members(
     )
 
     assert response.status_code == 200, f"Response status code: {response.status_code}"
-    assert len(response.json) == expected, (
-        f"Expected {expected} members, but got {len(response.json)}. "
-        f"Response JSON: {response.json}"
+    assert response.json["pagination"] == expected, (
+        f"Expected {expected} members, but got {response.json["pagination"]}."
     )
+    assert len(response.json["members"]) == length
+
+
+def test_get_members_wrong_limit(
+    client: FlaskClient,
+) -> None:
+
+    response = client.get(
+        "/members/?limit=-2",
+        headers={"Content-Type": "application/json"},
+    )
+
+    assert response.status_code == 400, f"Response status code: {response.status_code}"
+    assert response.json == {"error": "Limit must be non-negative"}
+
+
+def test_get_members_wrong_offset(
+    client: FlaskClient,
+) -> None:
+
+    response = client.get(
+        "/members/?offset=-2",
+        headers={"Content-Type": "application/json"},
+    )
+
+    assert response.status_code == 400, f"Response status code: {response.status_code}"
+    assert response.json == {"error": "Offset must be non-negative"}
