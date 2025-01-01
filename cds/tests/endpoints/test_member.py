@@ -31,5 +31,8 @@ def test_get_members(
         headers={"Content-Type": "application/json"},
     )
 
-    assert response.status_code == 200
-    assert len(response.json) == expected
+    assert response.status_code == 200, f"Response status code: {response.status_code}"
+    assert len(response.json) == expected, (
+        f"Expected {expected} members, but got {len(response.json)}. "
+        f"Response JSON: {response.json}"
+    )
