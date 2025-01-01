@@ -39,27 +39,8 @@ def test_get_members(
     assert len(response.json["members"]) == length
 
 
-def test_get_members_wrong_limit(
-    client: FlaskClient,
-) -> None:
-
-    response = client.get(
-        "/members/?limit=-2",
-        headers={"Content-Type": "application/json"},
-    )
-
-    assert response.status_code == 400, f"Response status code: {response.status_code}"
-    assert response.json == {"error": "Limit must be non-negative"}
-
-
-def test_get_members_wrong_offset(
-    client: FlaskClient,
-) -> None:
-
-    response = client.get(
-        "/members/?offset=-2",
-        headers={"Content-Type": "application/json"},
-    )
-
-    assert response.status_code == 400, f"Response status code: {response.status_code}"
-    assert response.json == {"error": "Offset must be non-negative"}
+@pytest.mark.parametrize(("param", "value", "error"), [("limit", -2, "Limit must be non-negative"), ("offset", -2, "Offset must be non-negative")])
+def test_get_members_invalid_params(client: FlaskClient, param: str, value: int, error: str) -> None:
+    response = client.get(f"/members/?{param}={value}")
+    assert response.status_code == 400
+    assert response.json == {"error": error}
