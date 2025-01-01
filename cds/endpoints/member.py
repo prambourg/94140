@@ -45,8 +45,8 @@ def get_members() -> tuple[Response, int]:
     try:
         members = db.session.execute(stmt).scalars().all()
         total_members = db.session.execute(select(func.count()).select_from(Member)).scalar()
-    except Exception as e:  # noqa: BLE001
-        current_app.logger.exception("An error occurred while retrieving members: %s", str(e))
+    except Exception as e:
+        current_app.logger.exception("An error occurred while retrieving members: %s")
         return jsonify({"error": "Internal server error"}), 500
 
     return jsonify({
