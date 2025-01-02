@@ -1,5 +1,5 @@
 Vue.component('my-nav-bar', {
-    props: ['site'],
+    props: ['site', 'homeUrl'],
     data: function() {
         return  {
             search: '',
@@ -59,27 +59,25 @@ Vue.component('my-nav-bar', {
     },
     template: `
       <div class="jumbotron container m-5">
-          <h1 class="display-4">Hello, world!</h1>
-          <p class="lead">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</p>
+          <h1 class="display-4">Liste des membres du Café des Sciences</h1>
+          <p class="lead">Cette liste représente la liste des membres du Café des Sciences ayant leur cotisation à jour, année par année.</p>
           <hr class="my-4" />
-          <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</p>
-          <p class="lead">
-              <a class="btn btn-success btn-lg" href="wilber.co.ke" role="button">Learn more</a>
-          </p>
+          <p>Pour toute question, remarque ou demande de modification, me contacter à contact.laminutescientifique@gmail.com</p>
             <div class="d-flex justify-content-center">
-            <table class="table table-hover w-auto">
-            <thead>
-                <tr>
-                <th scope="col">Name</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(member, index) in members" :key="index">
-                <td>{{ member }}</td>
-                </tr>
-            </tbody>
-            </table>
-        </div>
+                <table class="table table-hover table-striped table-bordered w-auto text-center shadow-lg">
+                    <thead class="table-success">
+                        <tr>
+                            <th scope="col">Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(member, index) in members" :key="index">
+                            <td>{{ member }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
       </div>
     `
   });
@@ -111,7 +109,7 @@ Vue.component('my-nav-bar', {
     template: `
       <footer class="footer mt-auto py-3 bg-light">
           <div class="container">
-              <span class="text-muted mx-2"><strong>🇰🇪 {{ name }}</strong></span>
+              <span class="text-muted mx-2"><strong>🇫🇷 {{ name }}</strong></span>
               <a href=""><small>{{ website }}</small></a>
           </div>
       </footer>

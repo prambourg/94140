@@ -63,7 +63,7 @@ def get_members() -> tuple[Response, int]:
         ).scalar()
 
         if not members:
-            members = ["foo1", "foo2"]
+            members = [f"foo-{i}" for i in range(20)]
             print(members)
 
         return jsonify({

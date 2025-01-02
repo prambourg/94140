@@ -163,8 +163,8 @@ def create_app() -> Flask:  # noqa: C901
     }
 
     OWNER = {
-            "name": "Wilber Wanjira",
-            "website": "https://wilber.co.ke",
+            "name": "Rambourg Pierre",
+            "website": "https://www.94140.fr",
     }
 
     # pass data to the frontend
