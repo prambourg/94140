@@ -62,7 +62,7 @@ def get_members() -> tuple[Response, int]:
         ).scalar()
 
         return jsonify({
-           "members": members,
+            "members": members,
             "pagination": {"limit": limit, "offset": offset, "total": total_members, "year": year},
         }), 200
     except Exception:
