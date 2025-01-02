@@ -1,13 +1,17 @@
 from __future__ import annotations
 
+from datetime import datetime
+
 from flask import Blueprint, Response, current_app, jsonify, request
 from sqlalchemy import func, select
 
 from cds.models.member import Member
+from cds.models.subscription import Subscription
 from models.base import db
+from utils.datetime_tools import TIMEZONE
 
 members_blueprint = Blueprint("members_blueprint", __name__)
-
+current_year = int(datetime.now(tz=TIMEZONE).strftime("%Y"))
 
 @members_blueprint.route(
     "/members/",
@@ -19,24 +23,30 @@ def get_members() -> tuple[Response, int]:
     """Retrieve a paginated list of members.
 
     Query Parameters:
-        limit (int, optional): Maximum number of members to return.
-        offset (int, optional): Number of members to skip.
-        year (int, optional): Filter members by year.
+        limit (int, optional): Maximum number of members to return (non-negative).
+        offset (int, optional): Number of members to skip (non-negative).
+        year (int, optional): Filter members by campagne year. Defaults to the current year.
 
     Returns:
-        tuple[Response, int]: JSON response with member data and HTTP status code.
+        tuple[Response, int]: JSON response containing:
+            - members (list): List of member names.
+            - pagination (dict): Metadata about the pagination.
 
     """
     limit = request.args.get("limit", type=int)
     offset = request.args.get("offset", type=int)
-    year = request.args.get("year", type=int)
+    year = request.args.get("year", type=int) or current_year
 
     if limit is not None and limit < 0:
         return jsonify({"error": "Limit must be non-negative"}), 400
     if offset is not None and offset < 0:
         return jsonify({"error": "Offset must be non-negative"}), 400
 
-    stmt = select(Member.name)
+    stmt = (
+        select(Member.name)
+        .join(Subscription)
+        .filter(Subscription.campagne == year)
+    )
     if limit is not None:
         stmt = stmt.limit(limit)
     if offset is not None:
@@ -44,12 +54,19 @@ def get_members() -> tuple[Response, int]:
 
     try:
         members = db.session.execute(stmt).scalars().all()
-        total_members = db.session.execute(select(func.count()).select_from(Member)).scalar()
+        total_members = db.session.execute(
+            select(func.count()).select_from(
+                select(Member)
+                .join(Subscription)
+                .filter(Subscription.campagne == year)
+                .subquery(),
+            ),
+        ).scalar()
+
+        return jsonify({
+           "members": members,
+            "pagination": {"limit": limit, "offset": offset, "total": total_members, "year": year},
+        }), 200
     except Exception as e:
         current_app.logger.exception("An error occurred while retrieving members: %s")
         return jsonify({"error": "Internal server error"}), 500
-
-    return jsonify({
-        "members": members,
-        "pagination": {"limit": limit, "offset": offset, "total": total_members},
-    }), 200
