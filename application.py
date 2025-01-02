@@ -11,6 +11,7 @@ from werkzeug import Response
 
 from admin import init_admin
 from cds.endpoints.hello_asso import hello_asso_blueprint
+from cds.endpoints.member import members_blueprint
 from cds.utils.hello_asso import process_from_scratch
 from endpoints.home import home
 from endpoints.measurement import measurement_blueprint
@@ -161,6 +162,7 @@ def create_app() -> Flask:  # noqa: C901
     application.register_blueprint(tutorial_blueprint)
     application.register_blueprint(youtube_blueprint)
     application.register_blueprint(hello_asso_blueprint)
+    application.register_blueprint(members_blueprint)
 
     return application
 
