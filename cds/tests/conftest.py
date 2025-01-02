@@ -3,7 +3,7 @@ from sqlalchemy.orm.scoping import scoped_session
 
 from cds.models.member import Member
 from cds.models.subscription import Subscription
-from tests.conftest import app, login_as_admin, login_as_user, session
+from tests.conftest import app, captured_templates, login_as_admin, login_as_user, session
 
 
 @pytest.fixture

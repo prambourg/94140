@@ -157,35 +157,6 @@ def create_app() -> Flask:  # noqa: C901
             mimetype="image/vnd.microsoft.icon",
         )
 
-    # landing page
-    @application.route("/home/")
-    def welcome() -> str:
-        site = {
-        "logo": "FLASK-VUE",
-        "version": "0.0.1",
-        }
-
-        owner = {
-                "name": "Rambourg Pierre",
-                "website": "https://www.94140.fr",
-        }
-
-        navbar = {
-            "Home": {"label": "Home", "url": url_for("home.index")},
-            "CV": {"label": "CV", "url": url_for("home.cv")},
-            "Mesures": {"label": "Mesures", "url": url_for("measurement_blueprint.measurements")},
-            "Camera": {"label": "Camera", "url": url_for("home.camera")},
-            "Python": {"label": "Python", "url": url_for("tutorial_blueprint.tutorial")},
-        }
-
-        # pass data to the frontend
-        site_data = {
-            "site": site,
-            "owner": owner,
-            "navbar": navbar,
-        }
-        return render_template("index2.html", **site_data)
-
     application.register_blueprint(measurement_blueprint)
     application.register_blueprint(home)
     application.register_blueprint(tutorial_blueprint)

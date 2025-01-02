@@ -1,6 +1,12 @@
+from collections.abc import Generator
+from typing import TYPE_CHECKING, Any
+
 import pytest
 from flask.testing import FlaskClient
 from sqlalchemy.orm.scoping import scoped_session
+
+if TYPE_CHECKING:
+    from jinja2 import Template
 
 
 @pytest.mark.parametrize(
@@ -60,3 +66,15 @@ def test_get_members_invalid_params(client: FlaskClient, param: str, value: int,
     response = client.get(f"/members/?{param}={value}")
     assert response.status_code == 400
     assert response.json == {"error": error}
+
+
+def test_home_page(client: FlaskClient, captured_templates: Generator[list, Any, None]) -> None:
+    response = client.get("/home/")
+    assert response.status_code == 200
+
+    assert len(captured_templates) == 1
+    template: Template
+    template, _ = captured_templates[0]
+
+    assert template.name == "index2.html"
+    assert b"<title>Aeth website - VueJS</title>" in response.data
