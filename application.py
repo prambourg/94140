@@ -157,6 +157,27 @@ def create_app() -> Flask:  # noqa: C901
             mimetype="image/vnd.microsoft.icon",
         )
 
+    SITE = {
+        "logo": "FLASK-VUE",
+        "version": "0.0.1",
+    }
+
+    OWNER = {
+            "name": "Wilber Wanjira",
+            "website": "https://wilber.co.ke",
+    }
+
+    # pass data to the frontend
+    site_data = {
+        "site": SITE,
+        "owner": OWNER,
+    }
+
+    # landing page
+    @application.route("/coucou/")
+    def welcome():
+        return render_template("index2.html", **site_data)
+
     application.register_blueprint(measurement_blueprint)
     application.register_blueprint(home)
     application.register_blueprint(tutorial_blueprint)

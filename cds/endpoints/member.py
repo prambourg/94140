@@ -62,6 +62,10 @@ def get_members() -> tuple[Response, int]:
             ),
         ).scalar()
 
+        if not members:
+            members = ["foo1", "foo2"]
+            print(members)
+
         return jsonify({
             "members": members,
             "pagination": {"limit": limit, "offset": offset, "total": total_members, "year": year},
