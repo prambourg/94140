@@ -13,6 +13,7 @@ from utils.datetime_tools import TIMEZONE
 members_blueprint = Blueprint("members_blueprint", __name__)
 current_year = int(datetime.now(tz=TIMEZONE).strftime("%Y"))
 
+
 @members_blueprint.route(
     "/members/",
     methods=[
