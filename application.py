@@ -157,25 +157,25 @@ def create_app() -> Flask:  # noqa: C901
             mimetype="image/vnd.microsoft.icon",
         )
 
-    SITE = {
+    site = {
         "logo": "FLASK-VUE",
         "version": "0.0.1",
     }
 
-    OWNER = {
+    owner = {
             "name": "Rambourg Pierre",
             "website": "https://www.94140.fr",
     }
 
     # pass data to the frontend
     site_data = {
-        "site": SITE,
-        "owner": OWNER,
+        "site": site,
+        "owner": owner,
     }
 
     # landing page
     @application.route("/coucou/")
-    def welcome():
+    def welcome() -> str:
         return render_template("index2.html", **site_data)
 
     application.register_blueprint(measurement_blueprint)
