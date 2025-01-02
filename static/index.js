@@ -1,38 +1,20 @@
 Vue.component('my-nav-bar', {
-    props: ['site', 'homeUrl'],
-    data: function() {
-        return  {
-            search: '',
-        }
-    },
-    methods: {
-        searchMe: function () {
-            console.log(this.search)
-        }
-    },
-    computed: {
-        logo() {
-            site_logo = 'MySite'
-            for(const property in this.site) {
-                if (property == 'logo') {
-                    site_logo = `${this.site[property]}`;
-                    break;
-                }
-            }
-            return site_logo;
-        }
-    },
+    props: ['navbar'],
     template: `
-        <nav class="navbar navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
-                <a class="navbar-brand bg-success p-1 text-light shadow">{{ logo }}</a>
-                <form class="d-flex" v-on:submit.prevent="searchMe">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="search" />
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item" v-for="el in navbar" :key="el.label">
+                            <a class="nav-link text-dark" :href="el.url">{{ el.label }}</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </nav>
-    `
+        </nav>`
   });
   
   Vue.component('my-hero', {
@@ -58,16 +40,16 @@ Vue.component('my-nav-bar', {
         this.getMembers();
     },
     template: `
-      <div class="jumbotron container m-5">
-          <h1 class="display-4">Liste des membres du Café des Sciences</h1>
-          <p class="lead">Cette liste représente la liste des membres du Café des Sciences ayant leur cotisation à jour, année par année.</p>
-          <hr class="my-4" />
-          <p>Pour toute question, remarque ou demande de modification, me contacter à contact.laminutescientifique@gmail.com</p>
+        <div class="jumbotron container my-5 p-4 bg-light border rounded shadow">
+            <h1 class="display-4 text-success">Liste des membres du Café des Sciences</h1>
+            <p class="lead text-secondary">Cette liste représente les membres ayant leur cotisation à jour, pour l'année courante.</p>
+            <hr class="my-4" />
+            <p class="text-secondary">Pour toute question, me contacter à <strong>contact.laminutescientifique@gmail.com</strong>.</p>
             <div class="d-flex justify-content-center">
                 <table class="table table-hover table-striped table-bordered w-auto text-center shadow-lg">
                     <thead class="table-success">
                         <tr>
-                            <th scope="col">Name</th>
+                            <th scope="col">Nom</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -77,8 +59,7 @@ Vue.component('my-nav-bar', {
                     </tbody>
                 </table>
             </div>
-
-      </div>
+        </div>
     `
   });
   
@@ -107,12 +88,12 @@ Vue.component('my-nav-bar', {
         }
     },
     template: `
-      <footer class="footer mt-auto py-3 bg-light">
-          <div class="container">
-              <span class="text-muted mx-2"><strong>🇫🇷 {{ name }}</strong></span>
-              <a href=""><small>{{ website }}</small></a>
-          </div>
-      </footer>
+        <footer class="footer mt-auto py-3 bg-success text-light shadow">
+            <div class="container text-center">
+                <span class="fw-bold">🇫🇷 {{ name }}</span>
+                <a :href="website" class="text-light ms-2" target="_blank"><small>{{ website }}</small></a>
+            </div>
+        </footer>
     `
   });
   
