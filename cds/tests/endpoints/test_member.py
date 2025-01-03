@@ -69,7 +69,7 @@ def test_get_members_invalid_params(client: FlaskClient, param: str, value: int,
 
 
 def test_home_page(client: FlaskClient, captured_templates: Generator[list, Any, None]) -> None:
-    response = client.get("/home/")
+    response = client.get("/liste_membres/")
     assert response.status_code == 200
 
     assert len(captured_templates) == 1
