@@ -142,16 +142,19 @@ class Member(BaseModel):
     def url(self) -> str:
         if self.website is not None:
             return self.website
-        try:
-            sub = list(filter(lambda x: x.campagne == "2024", self.subscriptions))
-            return sub[0].url
-        except IndexError:
-            sub = list(filter(lambda x: x.campagne == "2023", self.subscriptions))
-            return sub[0].url
+
+        ordered_subscriptions: list[Subscription] = self.ordered_subscriptions()
+
+        while ordered_subscriptions:
+            subscription = ordered_subscriptions.pop()
+            if url := subscription.url is not None:
+                return url
+
+        return ""
 
     @property
-    def last_subscription(self) -> Subscription:
-        ordered_subscriptions = {
+    def ordered_subscriptions(self) -> list[Subscription]:
+        ordered_subscriptions_index = {
             "pré-2019": -1,
             "2020": 0,
             "2021": 1,
@@ -162,9 +165,13 @@ class Member(BaseModel):
         }
 
         def foo(elem: Subscription) -> int:
-            return ordered_subscriptions[elem.campagne]
+            return ordered_subscriptions_index[elem.campagne]
 
-        sorted_subscriptions: list[Subscription] = sorted(self.subscriptions, key=foo)
+        return sorted(self.subscriptions, key=foo)
+
+    @property
+    def last_subscription(self) -> Subscription:
+        sorted_subscriptions: list[Subscription] = self.ordered_subscriptions()
         return sorted_subscriptions.pop()
 
     @property
