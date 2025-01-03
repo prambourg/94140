@@ -46,7 +46,7 @@ def get_members() -> tuple[Response, int]:
     stmt = (
         select(Member)
         .join(Subscription)
-        .filter(Subscription.campagne == year)
+        .filter(Subscription.campagne == str(year))
         .limit(limit)
         .offset(offset)
     )
@@ -57,7 +57,7 @@ def get_members() -> tuple[Response, int]:
             select(func.count()).select_from(
                 select(Member)
                 .join(Subscription)
-                .filter(Subscription.campagne == year)
+                .filter(Subscription.campagne == str(year))
                 .subquery(),
             ),
         ).scalar()
