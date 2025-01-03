@@ -143,7 +143,7 @@ class Member(BaseModel):
         if self.website is not None:
             return self.website
 
-        ordered_subscriptions: list[Subscription] = self.ordered_subscriptions()
+        ordered_subscriptions: list[Subscription] = self.ordered_subscriptions
 
         while ordered_subscriptions:
             subscription = ordered_subscriptions.pop()
