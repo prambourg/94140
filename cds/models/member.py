@@ -1,5 +1,6 @@
 import re
 
+from flask import current_app
 from markupsafe import Markup
 from sqlalchemy import func, select
 
@@ -176,24 +177,32 @@ class Member(BaseModel):
 
     @property
     def format_url(self) -> Markup:
-        return " ".join(
-            '<a href="{url}" title="Link to member\'s platform">{url}</a>'.format(
-                url=word if word.startswith("http") else "https://" + word,
-            )
-            if any(
-                ext in word
-                for ext in (
-                    "http",
-                    ".com",
-                    ".fr",
-                    ".tv",
-                    ".org",
-                    ".Science",
+        try:
+            return " ".join(
+                '<a href="{url}" title="Link to member\'s platform">{url}</a>'.format(
+                    url=word if word.startswith("http") else "https://" + word,
                 )
+                if any(
+                    ext in word
+                    for ext in (
+                        "http",
+                        ".com",
+                        ".fr",
+                        ".tv",
+                        ".org",
+                        ".Science",
+                    )
+                )
+                else word
+                for word in re.split(r" |\n", self.url)
             )
-            else word
-            for word in re.split(r" |\n", self.url)
-        )
+        except TypeError:
+            current_app.logger.warning(
+                {
+                    "error": "TypeError",
+                    "Member": self.row2dict(),
+                },
+            )
 
     def __repr__(self) -> str:
         return f"<Member {self.name} ({self.first_name} {self.last_name})>"
