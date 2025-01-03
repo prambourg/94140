@@ -40,7 +40,7 @@ def init_cds_admin(admin: Admin) -> None:
             Member,
             db.session,
             name="Liste des membres publique 2024",
-            endpoint="liste_membre",
+            endpoint="liste_membres_2024",
             category=CDS_CATEGORY,
         ),
     )

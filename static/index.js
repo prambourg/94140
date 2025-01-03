@@ -26,7 +26,7 @@ Vue.component('my-nav-bar', {
     },
     methods: {
         getMembers() {
-          const path = 'http://localhost:5000/members?year=' + this.selectedYear;
+          const path = window.location.origin + '/members?year=' + this.selectedYear;
           axios.get(path)
             .then((res) => {
               this.members = res.data.members;console.log(res.data)
@@ -52,7 +52,7 @@ Vue.component('my-nav-bar', {
                 <p class="text-secondary">Pour toute question, me contacter à <strong>contact.laminutescientifique@gmail.com</strong>.</p>
                 <label for="yearSelect" class="form-label text-secondary">Année :</label>
                 <select id="yearSelect" class="form-select w-auto d-inline" v-model="selectedYear" @change="updateYear">
-                    <option v-for="year in [2020, 2021, 2022, 2023, 2024, 2025]" :key="year" :value="year">{{ year }}</option>
+                    <option v-for="year in [2025, 2024, 2023, 2022, 2021, 2020]" :key="year" :value="year">{{ year }}</option>
                 </select>
             </div>
             <div class="d-flex justify-content-center">
@@ -65,8 +65,8 @@ Vue.component('my-nav-bar', {
                     </thead>
                     <tbody>
                         <tr v-for="(member, index) in members" :key="index">
-                            <td>{{ member }}</td>
-                            <td></td>
+                            <td>{{ member[0] }}</td>
+                            <td v-html="member[1]"></td>
                         </tr>
                     </tbody>
                 </table>

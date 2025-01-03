@@ -44,7 +44,7 @@ def get_members() -> tuple[Response, int]:
         return jsonify({"error": "Offset must be non-negative"}), 400
 
     stmt = (
-        select(Member.name)
+        select(Member)
         .join(Subscription)
         .filter(Subscription.campagne == year)
         .limit(limit)
@@ -62,9 +62,7 @@ def get_members() -> tuple[Response, int]:
             ),
         ).scalar()
 
-        if not members:
-            members = [f"foo-{i}-{year}" for i in range(20)]
-            print(members)
+        members = [(member.name, member.format_url) for member in members]
 
         return jsonify({
             "members": members,
@@ -75,11 +73,11 @@ def get_members() -> tuple[Response, int]:
         return jsonify({"error": "Internal server error"}), 500
 
 
-@members_blueprint.route("/home/")
+@members_blueprint.route("/liste_membres/")
 def welcome() -> str:
     site = {
-    "logo": "FLASK-VUE",
-    "version": "0.0.1",
+        "logo": "FLASK-VUE",
+        "version": "0.0.1",
     }
 
     owner = {

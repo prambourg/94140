@@ -1,3 +1,6 @@
+import re
+
+from markupsafe import Markup
 from sqlalchemy import func, select
 
 from cds.models.subscription import Subscription
@@ -92,6 +95,8 @@ class Member(BaseModel):
 
     @property
     def up_to_date(self) -> bool:
+        if self.subscriptions is None:
+            return False
         return (
             any("2025" in s.campagne for s in self.subscriptions)
             or self.confirmed_departure
@@ -99,26 +104,38 @@ class Member(BaseModel):
 
     @property
     def is_2024(self) -> bool:
+        if self.subscriptions is None:
+            return False
         return any("2024" in s.campagne for s in self.subscriptions)
 
     @property
     def is_2023(self) -> bool:
+        if self.subscriptions is None:
+            return False
         return any("2023" in s.campagne for s in self.subscriptions)
 
     @property
     def is_2022(self) -> bool:
+        if self.subscriptions is None:
+            return False
         return any("2022" in s.campagne for s in self.subscriptions)
 
     @property
     def is_2021(self) -> bool:
+        if self.subscriptions is None:
+            return False
         return any("2021" in s.campagne for s in self.subscriptions)
 
     @property
     def is_2020(self) -> bool:
+        if self.subscriptions is None:
+            return False
         return any("2020" in s.campagne for s in self.subscriptions)
 
     @property
     def is_pre2019(self) -> bool:
+        if self.subscriptions is None:
+            return False
         return any("pré-2019" in s.campagne for s in self.subscriptions)
 
     @property
@@ -149,6 +166,27 @@ class Member(BaseModel):
 
         sorted_subscriptions: list[Subscription] = sorted(self.subscriptions, key=foo)
         return sorted_subscriptions.pop()
+
+    @property
+    def format_url(self) -> Markup:
+        return " ".join(
+            '<a href="{url}" title="Link to member\'s platform">{url}</a>'.format(
+                url=word if word.startswith("http") else "https://" + word,
+            )
+            if any(
+                ext in word
+                for ext in (
+                    "http",
+                    ".com",
+                    ".fr",
+                    ".tv",
+                    ".org",
+                    ".Science",
+                )
+            )
+            else word
+            for word in re.split(r" |\n", self.url)
+        )
 
     def __repr__(self) -> str:
         return f"<Member {self.name} ({self.first_name} {self.last_name})>"
