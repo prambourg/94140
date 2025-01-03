@@ -148,8 +148,8 @@ class Member(BaseModel):
 
         while ordered_subscriptions:
             subscription = ordered_subscriptions.pop()
-            if url := subscription.url is not None:
-                return url
+            if subscription.url not in {"None", None}:
+                return subscription.url
 
         return ""
 
@@ -194,13 +194,14 @@ class Member(BaseModel):
                     )
                 )
                 else word
-                for word in re.split(r" |\n", self.url)
+                for word in re.split(" |\n", self.url)
             )
         except TypeError:
             current_app.logger.warning(
                 {
                     "error": "TypeError",
-                    "Member": self.row2dict(),
+                    "member": self.row2dict(),
+                    "url": self.url,
                 },
             )
 
