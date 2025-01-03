@@ -5,6 +5,8 @@ import pytest
 from flask.testing import FlaskClient
 from sqlalchemy.orm.scoping import scoped_session
 
+from cds.endpoints.member import DEFAULT_LIMIT
+
 if TYPE_CHECKING:
     from jinja2 import Template
 
@@ -12,10 +14,10 @@ if TYPE_CHECKING:
 @pytest.mark.parametrize(
         ("limit", "offset", "expected", "length"),
         [
-            (None, None, {"limit": 100, "offset": 0, "total": 5, "year": 2025}, 5),
-            (0, 0, {"limit": 100, "offset": 0, "total": 5, "year": 2025}, 5),
+            (None, None, {"limit": DEFAULT_LIMIT, "offset": 0, "total": 5, "year": 2025}, 5),
+            (0, 0, {"limit": DEFAULT_LIMIT, "offset": 0, "total": 5, "year": 2025}, 5),
             (2, None, {"limit": 2, "offset": 0, "total": 5, "year": 2025}, 2),
-            (None, 3, {"limit": 100, "offset": 3, "total": 5, "year": 2025}, 2),
+            (None, 3, {"limit": DEFAULT_LIMIT, "offset": 3, "total": 5, "year": 2025}, 2),
             (3, 1, {"limit": 3, "offset": 1, "total": 5, "year": 2025}, 3),
             (5, 4, {"limit": 5, "offset": 4, "total": 5, "year": 2025}, 1),
         ])
@@ -48,7 +50,7 @@ def test_get_members(
 def test_get_members_2024(client: FlaskClient, session_with_members: scoped_session) -> None:
     response = client.get("/members/?year=2024")
     assert response.status_code == 200, f"Response status code: {response.status_code}"
-    expected = {"limit": 100, "offset": 0, "total": 1, "year": 2024}
+    expected = {"limit": DEFAULT_LIMIT, "offset": 0, "total": 1, "year": 2024}
     assert response.json["pagination"] == expected, (
         f"Expected {expected} members, but got {response.json["pagination"]}."
     )
