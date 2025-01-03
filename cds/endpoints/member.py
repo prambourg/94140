@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from flask import Blueprint, Response, current_app, jsonify, request
+from flask import Blueprint, Response, current_app, jsonify, render_template, request, url_for
 from sqlalchemy import func, select
 
 from cds.models.member import Member
@@ -44,7 +44,7 @@ def get_members() -> tuple[Response, int]:
         return jsonify({"error": "Offset must be non-negative"}), 400
 
     stmt = (
-        select(Member.name)
+        select(Member)
         .join(Subscription)
         .filter(Subscription.campagne == year)
         .limit(limit)
@@ -62,6 +62,8 @@ def get_members() -> tuple[Response, int]:
             ),
         ).scalar()
 
+        members = [(member.name, member.format_url) for member in members]
+
         return jsonify({
             "members": members,
             "pagination": {"limit": limit, "offset": offset, "total": total_members, "year": year},
@@ -69,3 +71,31 @@ def get_members() -> tuple[Response, int]:
     except Exception:
         current_app.logger.exception("An error occurred while retrieving members: %s")
         return jsonify({"error": "Internal server error"}), 500
+
+
+@members_blueprint.route("/liste_membres/")
+def welcome() -> str:
+    site = {
+        "logo": "FLASK-VUE",
+        "version": "0.0.1",
+    }
+
+    owner = {
+            "name": "Rambourg Pierre",
+            "website": "https://www.94140.fr",
+    }
+
+    navbar = {
+        "Home": {"label": "Home", "url": url_for("home.index")},
+        "CV": {"label": "CV", "url": url_for("home.cv")},
+        "Mesures": {"label": "Mesures", "url": url_for("measurement_blueprint.measurements")},
+        "Camera": {"label": "Camera", "url": url_for("home.camera")},
+        "Python": {"label": "Python", "url": url_for("tutorial_blueprint.tutorial")},
+    }
+
+    site_data = {
+        "site": site,
+        "owner": owner,
+        "navbar": navbar,
+    }
+    return render_template("index2.html", **site_data)
