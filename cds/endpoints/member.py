@@ -13,6 +13,8 @@ from utils.datetime_tools import TIMEZONE
 members_blueprint = Blueprint("members_blueprint", __name__)
 current_year = int(datetime.now(tz=TIMEZONE).strftime("%Y"))
 
+DEFAULT_LIMIT = 300
+
 
 @members_blueprint.route(
     "/members/",
@@ -21,20 +23,24 @@ current_year = int(datetime.now(tz=TIMEZONE).strftime("%Y"))
     ],
 )
 def get_members() -> tuple[Response, int]:
-    """Retrieve a paginated list of members.
+    """Retrieve a paginated and alphabetically sorted list of members.
 
     Query Parameters:
-        limit (int, optional): Maximum number of members to return (non-negative). Defaults to 100.
-        offset (int, optional): Number of members to skip (non-negative). Defaults 0.
-        year (int, optional): Filter members by campagne year. Defaults to the current year.
+        limit (int, optional): Maximum number of members to return (non-negative). Defaults to 300.
+        offset (int, optional): Number of members to skip (non-negative). Defaults to 0.
+        year (int, optional): Filter members by campaign year. Defaults to the current year.
 
     Returns:
         tuple[Response, int]: JSON response containing:
-            - members (list): List of member names.
-            - pagination (dict): Metadata about the pagination.
+            - members (list): List of member tuples (name, format_url), sorted alphabetically by name.
+            - pagination (dict): Metadata about the pagination:
+                - limit: The specified or default limit.
+                - offset: The specified or default offset.
+                - total: Total number of members for the specified year.
+                - year: The campaign year being queried.
 
     """
-    limit = request.args.get("limit", type=int) or 100
+    limit = request.args.get("limit", type=int) or DEFAULT_LIMIT
     offset = request.args.get("offset", type=int) or 0
     year = request.args.get("year", type=int) or current_year
 
@@ -47,6 +53,7 @@ def get_members() -> tuple[Response, int]:
         select(Member)
         .join(Subscription)
         .filter(Subscription.campagne == str(year))
+        .order_by(Member.name)
         .limit(limit)
         .offset(offset)
     )
