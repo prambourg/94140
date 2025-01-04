@@ -18,21 +18,17 @@ members_data = [
 
 
 def create_members_bundle(session_db: scoped_session, year: int = 2025, nb_member: int = 5) -> None:
-    members_data = [
-        {
-            "name": f"foo_{year}_{i}",
-            "email": f"mail_{year}_{i}",
-            "first_name": f"first_name_{year}_{i}",
-            "last_name": f"last_name_{year}_{i}",
-            "website": f"website_{year}_{i}",
-        }
-        for i in range(nb_member)
-    ]
-
-    members = [Member(**member) for member in members_data]
-
-    for member in members:
+    members = []
+    for i in range(nb_member):
+        member = Member(
+            name=f"foo_{year}_{i}",
+            email=f"mail_{year}_{i}",
+            first_name=f"first_name_{year}_{i}",
+            last_name=f"last_name_{year}_{i}",
+            website=f"website_{year}_{i}",
+        )
         session_db.add(member)
+        members.append(member)
     session_db.commit()
 
     for index, member in enumerate(members):

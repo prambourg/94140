@@ -3,6 +3,7 @@ from sqlalchemy.orm.scoping import scoped_session
 
 from cds.models.member import Member, reconciliation
 from cds.models.subscription import Subscription
+from cds.tests.conftest import create_members_bundle
 
 sub_base = {
     "first_name": "Pierre",
@@ -167,3 +168,60 @@ def test_sub_same_mail_missing_data(session: scoped_session) -> None:
     assert member.last_name == base.last_name
     assert member.name == base.name
     assert member.email == sub_same_mail_missing_data.email
+
+
+def test_member_properties(session: scoped_session) -> None:
+    create_members_bundle(session, 2025, 1)
+    member: Member = session.query(Member).first()
+    assert member.up_to_date is True
+    assert member.is_2024 is False
+    assert member.is_2023 is False
+    assert member.is_2022 is False
+    assert member.is_2021 is False
+    assert member.is_2020 is False
+    assert member.is_pre2019 is False
+    assert member.url == "website_2025_0"
+    assert member.ordered_subscriptions == [*member.subscriptions]
+    assert member.last_subscription == member.subscriptions[0]
+    assert member.format_url == "website_2025_0"
+    assert repr(member) == f"<Member {member.name} ({member.first_name} {member.last_name})>"
+
+
+def test_member_url(session: scoped_session) -> None:
+    create_members_bundle(session, 2022, 1)
+    member: Member = session.query(Member).first()
+    sub_2020: Subscription = session.query(Subscription).first()
+
+    member.website = "member_foobar"
+    sub_2020.url = "sub_2020_foobar"
+
+    assert member.url == "member_foobar"
+
+    member.website = None
+    assert member.url == "sub_2020_foobar"
+
+    sub_2025 = Subscription(hello_asso_id="foobar_id", campagne="2025", url="sub_2025_foobar", member_id=member.id)
+    session.add(sub_2025)
+    session.commit()
+
+    assert member.url == "sub_2025_foobar"
+
+
+def test_member_subscriptions(session: scoped_session) -> None:
+    create_members_bundle(session, 2020, 1)
+    member: Member = session.query(Member).first()
+    sub_2020: Subscription = session.query(Subscription).first()
+
+    assert member.ordered_subscriptions == [sub_2020]
+    assert member.last_subscription == sub_2020
+    assert member.is_2020 is True
+    assert member.up_to_date is False
+
+    sub_2025 = Subscription(hello_asso_id="foobar_id", campagne="2025", member_id=member.id)
+    session.add(sub_2025)
+    session.commit()
+
+    assert member.ordered_subscriptions == [sub_2020, sub_2025]
+    assert member.last_subscription == sub_2025
+    assert member.is_2020 is True
+    assert member.up_to_date is True
