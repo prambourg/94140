@@ -212,6 +212,8 @@ def test_member_subscriptions(session: scoped_session) -> None:
     member: Member = session.query(Member).first()
     sub_2020: Subscription = session.query(Subscription).first()
 
+    assert member.ordered_subscriptions == [sub_2020]
+    assert member.last_subscription == sub_2020
     assert member.is_2020 is True
     assert member.up_to_date is False
 
