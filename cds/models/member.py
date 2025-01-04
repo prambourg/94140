@@ -172,7 +172,7 @@ class Member(BaseModel):
 
     @property
     def last_subscription(self) -> Subscription:
-        sorted_subscriptions: list[Subscription] = self.ordered_subscriptions()
+        sorted_subscriptions: list[Subscription] = self.ordered_subscriptions
         return sorted_subscriptions.pop()
 
     @property
