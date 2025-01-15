@@ -157,6 +157,33 @@ def create_app() -> Flask:  # noqa: C901
             mimetype="image/vnd.microsoft.icon",
         )
 
+    @application.context_processor
+    def inject_defaults():
+        site = {
+            "logo": "FLASK-VUE",
+            "version": "0.0.1",
+        }
+
+        owner = {
+                "name": "Rambourg Pierre",
+                "website": "https://www.94140.fr",
+        }
+
+        navbar = {
+            "Home": {"label": "Home", "url": url_for("home.index")},
+            "CV": {"label": "CV", "url": url_for("home.cv")},
+            "Mesures": {"label": "Mesures", "url": url_for("measurement_blueprint.measurements")},
+            "Camera": {"label": "Camera", "url": url_for("home.camera")},
+            "Python": {"label": "Python", "url": url_for("tutorial_blueprint.tutorial")},
+            "Membres_CDS": {"label": "Membres Café des Sciences", "url": url_for("members_blueprint.liste_membres")},
+        }
+
+        return {
+            "site": site,
+            "owner": owner,
+            "navbar": navbar,
+        }
+
     application.register_blueprint(measurement_blueprint)
     application.register_blueprint(home)
     application.register_blueprint(tutorial_blueprint)

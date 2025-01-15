@@ -81,28 +81,5 @@ def get_members() -> tuple[Response, int]:
 
 
 @members_blueprint.route("/liste_membres/")
-def welcome() -> str:
-    site = {
-        "logo": "FLASK-VUE",
-        "version": "0.0.1",
-    }
-
-    owner = {
-            "name": "Rambourg Pierre",
-            "website": "https://www.94140.fr",
-    }
-
-    navbar = {
-        "Home": {"label": "Home", "url": url_for("home.index")},
-        "CV": {"label": "CV", "url": url_for("home.cv")},
-        "Mesures": {"label": "Mesures", "url": url_for("measurement_blueprint.measurements")},
-        "Camera": {"label": "Camera", "url": url_for("home.camera")},
-        "Python": {"label": "Python", "url": url_for("tutorial_blueprint.tutorial")},
-    }
-
-    site_data = {
-        "site": site,
-        "owner": owner,
-        "navbar": navbar,
-    }
-    return render_template("index2.html", **site_data)
+def liste_membres() -> str:
+    return render_template("liste_membres.html")

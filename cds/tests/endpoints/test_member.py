@@ -78,5 +78,5 @@ def test_home_page(client: FlaskClient, captured_templates: Generator[list, Any,
     template: Template
     template, _ = captured_templates[0]
 
-    assert template.name == "index2.html"
-    assert b"<title>Aeth website - VueJS</title>" in response.data
+    assert template.name == "liste_membres.html"
+    assert b"<title>Liste des membres du Caf\xc3\xa9 des Sciences</title>" in response.data
