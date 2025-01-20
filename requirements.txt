@@ -73,7 +73,7 @@ packaging==24.2
     # via pytest
 pluggy==1.5.0
     # via pytest
-plum-dispatch==2.5.6
+plum-dispatch==2.5.7
     # via flask-aws (pyproject.toml)
 py==1.11.0
     # via retry
