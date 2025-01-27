@@ -77,7 +77,7 @@ plum-dispatch==2.5.6
     # via flask-aws (pyproject.toml)
 py==1.11.0
     # via retry
-pydantic==2.10.5
+pydantic==2.10.6
     # via flask-pydantic
 pydantic-core==2.27.2
     # via pydantic
