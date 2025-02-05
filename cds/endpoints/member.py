@@ -3,10 +3,9 @@ from __future__ import annotations
 from datetime import datetime
 
 from flask import Blueprint, Response, current_app, jsonify, render_template, request, url_for
-from sqlalchemy import func, select
+from sqlalchemy.orm import Session
 
-from cds.models.member import Member
-from cds.models.subscription import Subscription
+from cds.services.member_service import MemberService
 from models.base import db
 from utils.datetime_tools import TIMEZONE
 
@@ -49,31 +48,20 @@ def get_members() -> tuple[Response, int]:
     if offset < 0:
         return jsonify({"error": "Offset must be non-negative"}), 400
 
-    stmt = (
-        select(Member)
-        .join(Subscription)
-        .filter(Subscription.campagne == str(year))
-        .order_by(Member.name)
-        .limit(limit)
-        .offset(offset)
-    )
-
     try:
-        members = db.session.execute(stmt).scalars().all()
-        total_members = db.session.execute(
-            select(func.count()).select_from(
-                select(Member)
-                .join(Subscription)
-                .filter(Subscription.campagne == str(year))
-                .subquery(),
-            ),
-        ).scalar()
-
-        members = [(member.name, member.format_url) for member in members]
+        with Session(db.engine) as session:
+            member_service = MemberService(session)
+            members = member_service.get_members(year=year, limit=limit, offset=offset)
+            total_members = member_service.get_members_count(year=year)
 
         return jsonify({
-            "members": members,
-            "pagination": {"limit": limit, "offset": offset, "total": total_members, "year": year},
+            "members": [(member.name, member.format_url) for member in members],
+            "pagination": {
+                "limit": limit,
+                "offset": offset,
+                "total": total_members,
+                "year": year,
+            },
         }), 200
     except Exception:
         current_app.logger.exception("An error occurred while retrieving members: %s")
