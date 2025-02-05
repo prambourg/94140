@@ -1,18 +1,16 @@
 import operator
-from datetime import datetime, timedelta
 from typing import Any, Literal
 
 from flask import Blueprint, render_template, request
 from flask_babel import gettext
 from flask_pydantic import validate
 from retry import retry
-from sqlalchemy import select
 from sqlalchemy.exc import OperationalError
+from sqlalchemy.orm import Session
 
 from models.base import db
-from models.measurement import Measurement
 from schemas.measurement import MeasurementSchema
-from utils.datetime_tools import TIMEZONE
+from services.measurement_service import MeasurementService
 
 measurement_blueprint = Blueprint("measurement_blueprint", __name__)
 
@@ -27,22 +25,14 @@ measurement_blueprint = Blueprint("measurement_blueprint", __name__)
 @retry(OperationalError, tries=10, delay=1)
 def measurement_create(body: MeasurementSchema) -> (tuple[dict[str, Any], Literal[201]] | None):
     if request.method == "POST":
-        measurement = Measurement(
-            timestamp=body.timestamp,
-            temperature=body.temperature,
-            humidity=body.humidity,
-        )
-        try:
-            db.session.add(measurement)
-            db.session.commit()
-        except Exception:
-            db.session.rollback()
-            raise
+        with Session(db.engine) as session:
+            measurement_service = MeasurementService(session)
+            new_measurement = measurement_service.save_measurement(body)
 
         return {
-            "timestamp": measurement.timestamp,
-            "temperature": measurement.temperature,
-            "humidity": measurement.humidity,
+            "timestamp": new_measurement.timestamp,
+            "temperature": new_measurement.temperature,
+            "humidity": new_measurement.humidity,
         }, 201
     return None
 
@@ -56,20 +46,21 @@ def measurement_create(body: MeasurementSchema) -> (tuple[dict[str, Any], Litera
 @retry(OperationalError, tries=10, delay=1)
 def measurements() -> str:
     # date_debut, date_fin, granularité/step (default=10min, sinon heure, demi journée, journée, semaine, mois, an)
-    epoch_last_week = int((datetime.now(tz=TIMEZONE) - timedelta(days=7)).timestamp())
-    datas = db.session.execute(select(Measurement).where(Measurement.timestamp >= epoch_last_week)).scalars()
-    t = []
-    h = []
-    for data in datas:
-        temp = "null" if data.temperature is None else data.temperature
+    with Session(db.engine) as session:
+        measurement_service = MeasurementService(session)
+        datas = measurement_service.get_last_measurements()
+        t = []
+        h = []
+        for data in datas:
+            temp = "null" if data.temperature is None else data.temperature
 
-        hum = "null" if data.humidity is None else data.humidity
-        t.append(
-            {"x": int(str(data.timestamp).split(".")[0] + "000"), "y": temp},
-        )
-        h.append(
-            {"x": int(str(data.timestamp).split(".")[0] + "000"), "y": hum},
-        )
+            hum = "null" if data.humidity is None else data.humidity
+            t.append(
+                {"x": int(str(data.timestamp).split(".")[0] + "000"), "y": temp},
+            )
+            h.append(
+                {"x": int(str(data.timestamp).split(".")[0] + "000"), "y": hum},
+            )
     t.sort(key=operator.itemgetter("x"))
     h.sort(key=operator.itemgetter("x"))
 
