@@ -56,20 +56,22 @@ Vue.component('my-nav-bar', {
                 </select>
             </div>
             <div class="d-flex justify-content-center">
-                <table class="table table-hover table-striped table-bordered w-auto text-center shadow-lg">
-                    <thead class="table-success">
-                        <tr>
-                            <th scope="col">Nom</th>
-                            <th scope="col">URLs</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(member, index) in members" :key="index">
-                            <td>{{ member[0] }}</td>
-                            <td v-html="member[1]"></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped table-bordered text-center shadow-lg">
+                        <thead class="table-success">
+                            <tr>
+                                <th scope="col">Nom</th>
+                                <th scope="col">URLs</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(member, index) in members" :key="index">
+                                <td>{{ member[0] }}</td>
+                                <td v-html="member[1]"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     `
