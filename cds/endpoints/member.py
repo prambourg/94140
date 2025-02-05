@@ -53,9 +53,10 @@ def get_members() -> tuple[Response, int]:
             member_service = MemberService(session)
             members = member_service.get_members(year=year, limit=limit, offset=offset)
             total_members = member_service.get_members_count(year=year)
+            members_data = [(member.name, member.format_url) for member in members]
 
         return jsonify({
-            "members": [(member.name, member.format_url) for member in members],
+            "members": members_data,
             "pagination": {
                 "limit": limit,
                 "offset": offset,
