@@ -81,7 +81,7 @@ py==1.11.0
     # via retry
 pydantic==2.10.6
     # via flask-pydantic
-pydantic-core==2.27.2
+pydantic-core==2.30.0
     # via pydantic
 pygments==2.19.1
     # via rich
