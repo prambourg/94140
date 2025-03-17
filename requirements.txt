@@ -104,7 +104,7 @@ retry==0.9.2
     # via flask-aws (pyproject.toml)
 rich==13.9.4
     # via plum-dispatch
-sqlalchemy==2.0.37
+sqlalchemy==2.0.39
     # via flask-sqlalchemy
 typing-extensions==4.12.2
     # via
