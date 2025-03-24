@@ -4,7 +4,7 @@ annotated-types==0.7.0
     # via pydantic
 babel==2.17.0
     # via flask-babel
-beartype==0.19.0
+beartype==0.20.2
     # via plum-dispatch
 blinker==1.9.0
     # via flask
