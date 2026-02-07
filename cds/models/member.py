@@ -99,9 +99,21 @@ class Member(BaseModel):
         if self.subscriptions is None:
             return False
         return (
-            any("2025" in s.campagne for s in self.subscriptions)
+            any(("2025" or "2026") in s.campagne for s in self.subscriptions)
             or self.confirmed_departure
         )
+    
+    @property
+    def is_2026(self) -> bool:
+        if self.subscriptions is None:
+            return False
+        return any("2026" in s.campagne for s in self.subscriptions)
+    
+    @property
+    def is_2025(self) -> bool:
+        if self.subscriptions is None:
+            return False
+        return any("2025" in s.campagne for s in self.subscriptions)
 
     @property
     def is_2024(self) -> bool:
@@ -163,6 +175,7 @@ class Member(BaseModel):
             "2023": 3,
             "2024": 4,
             "2025": 5,
+            "2026": 6,
         }
 
         def foo(elem: Subscription) -> int:

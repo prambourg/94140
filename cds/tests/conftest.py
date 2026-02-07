@@ -40,7 +40,7 @@ def create_members_bundle(session_db: scoped_session, year: int = 2025, nb_membe
 
 @pytest.fixture
 def session_with_members(session: scoped_session) -> scoped_session:
-    create_members_bundle(session_db=session, year=2025, nb_member=5)
-    create_members_bundle(session_db=session, year=2024, nb_member=1)
+    create_members_bundle(session_db=session, year=2026, nb_member=5)
+    create_members_bundle(session_db=session, year=2025, nb_member=1)
 
     return session

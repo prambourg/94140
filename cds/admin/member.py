@@ -42,6 +42,8 @@ class MemberView(CdsModelView):
         "last_name",
         "subscriptions",
         "up_to_date",
+        "is_2026",
+        "is_2025",
         "is_2024",
         "is_2023",
         "is_2022",
@@ -211,6 +213,17 @@ class Member2025ListView(Member2023ListView):
             .filter(Subscription.campagne == "2025")
             .filter(Member.confirmed_departure.is_(False))
         )
+    
+class Member2026ListView(Member2023ListView):
+    @staticmethod
+    def get_query() -> Query:
+        return (
+            Member.query.join(
+                Subscription, Subscription.member_id == Member.id,
+            )
+            .filter(Subscription.campagne == "2026")
+            .filter(Member.confirmed_departure.is_(False))
+        )
 
 
 class MemberToContact2022(CdsModelView):
@@ -219,6 +232,8 @@ class MemberToContact2022(CdsModelView):
         "email",
         "subscriptions",
         "up_to_date",
+        "is_2026",
+        "is_2025",
         "is_2024",
         "is_2023",
         "is_2022",
@@ -235,6 +250,8 @@ class MemberToContact2022(CdsModelView):
         "email",
         "subscriptions",
         "up_to_date",
+        "is_2026",
+        "is_2025",
         "is_2024",
         "is_2023",
         "is_2022",

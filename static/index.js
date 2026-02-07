@@ -52,7 +52,7 @@ Vue.component('my-nav-bar', {
                 <p class="text-secondary">Pour toute question, me contacter à <strong>contact.laminutescientifique@gmail.com</strong>.</p>
                 <label for="yearSelect" class="form-label text-secondary">Année :</label>
                 <select id="yearSelect" class="form-select w-auto d-inline" v-model="selectedYear" @change="updateYear">
-                    <option v-for="year in [2025, 2024, 2023, 2022, 2021, 2020]" :key="year" :value="year">{{ year }}</option>
+                    <option v-for="year in [2026, 2025, 2024, 2023, 2022, 2021, 2020]" :key="year" :value="year">{{ year }}</option>
                 </select>
             </div>
             <div class="d-flex justify-content-center">

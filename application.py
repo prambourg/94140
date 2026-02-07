@@ -2,6 +2,7 @@ import os
 from logging.config import dictConfig
 from pathlib import Path
 
+from dotenv import load_dotenv
 from flask import Flask, flash, redirect, render_template, request, send_from_directory, url_for
 from flask_babel import Babel, gettext
 from flask_cors import CORS
@@ -18,6 +19,8 @@ from endpoints.measurement import measurement_blueprint
 from endpoints.python import tutorial_blueprint
 from endpoints.youtube import YOUTUBE_URLS, youtube_blueprint
 from models.base import User, db
+
+load_dotenv()
 
 DATABASES = {}
 if "RDS_HOSTNAME" in os.environ:

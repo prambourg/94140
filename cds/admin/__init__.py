@@ -4,6 +4,7 @@ from cds.admin.member import (
     Member2023ListView,
     Member2024ListView,
     Member2025ListView,
+    Member2026ListView,
     MemberToContact2020,
     MemberToContact2021,
     MemberToContact2022,
@@ -50,6 +51,15 @@ def init_cds_admin(admin: Admin) -> None:
             db.session,
             name="Liste des membres publique 2025",
             endpoint="liste_membres_2025",
+            category=CDS_CATEGORY,
+        ),
+    )
+    admin.add_view(
+        Member2026ListView(
+            Member,
+            db.session,
+            name="Liste des membres publique 2026",
+            endpoint="liste_membres_2026",
             category=CDS_CATEGORY,
         ),
     )
