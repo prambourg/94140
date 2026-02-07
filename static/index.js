@@ -18,7 +18,7 @@ Vue.component('my-nav-bar', {
   });
   
   Vue.component('my-hero', {
-    props: ['isAdmin'],
+    props: ['isAdmin', 'urlsSubscriptions'],
     data: function() {
         return  {
             members: [],
@@ -87,10 +87,17 @@ Vue.component('my-nav-bar', {
             <hr class="my-4" />
             <div class="mb-4">
                 <p class="text-secondary">Pour toute question, me contacter à <strong>contact.laminutescientifique@gmail.com</strong>.</p>
-                <label for="yearSelect" class="form-label text-secondary">Année :</label>
-                <select id="yearSelect" class="form-select w-auto d-inline" v-model="selectedYear" @change="updateYear">
-                    <option v-for="year in [2026, 2025, 2024, 2023, 2022, 2021, 2020]" :key="year" :value="year">{{ year }}</option>
-                </select>
+                <div class="d-flex align-items-center gap-3">
+                    <div>
+                        <label for="yearSelect" class="form-label text-secondary mb-0">Année :</label>
+                        <select id="yearSelect" class="form-select w-auto d-inline ms-2" v-model="selectedYear" @change="updateYear">
+                            <option v-for="year in [2026, 2025, 2024, 2023, 2022, 2021, 2020]" :key="year" :value="year">{{ year }}</option>
+                        </select>
+                    </div>
+                    <a v-if="urlsSubscriptions && urlsSubscriptions[selectedYear]" :href="urlsSubscriptions[selectedYear]" target="_blank" class="btn btn-success btn-sm">
+                        Cotiser pour la campagne {{ selectedYear }}
+                    </a>
+                </div>
             </div>
             <div class="d-flex justify-content-center">
                 <div class="table-responsive">

@@ -6,6 +6,7 @@ from flask import Blueprint, Response, current_app, jsonify, render_template, re
 from flask_login import current_user, login_required
 from sqlalchemy.orm import Session
 
+from cds.admin.subscription import URLS_SUBSCRIPTIONS
 from cds.services.member_service import MemberService
 from cds.utils.hello_asso import process
 from models.base import db
@@ -98,6 +99,7 @@ def welcome() -> str:
         "owner": owner,
         "navbar": navbar,
         "is_admin": is_admin,
+        "urls_subscriptions": URLS_SUBSCRIPTIONS,
     }
     return render_template("index2.html", **site_data)
 

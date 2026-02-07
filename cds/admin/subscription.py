@@ -7,6 +7,11 @@ from admin.base import CdsModelView
 from cds.models.subscription import Subscription
 from models.base import db
 
+URLS_SUBSCRIPTIONS = {
+    "2025": "https://www.helloasso.com/associations/c-fetiers-des-sciences/adhesions/cotisation-2025-au-cafe-des-sciences",
+    "2026": "https://www.helloasso.com/associations/c-fetiers-des-sciences/adhesions/cotisation-2026-au-cafe-des-sciences"
+}
+
 CAMPAGNES = (
     (("valider-l-adhesion-au-cafe-des-sciences",), "pré_2020"),
     (
