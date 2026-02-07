@@ -1,6 +1,7 @@
 import os
 from logging.config import dictConfig
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from flask import Flask, flash, redirect, render_template, request, send_from_directory, url_for
 from flask_babel import Babel, gettext
@@ -17,7 +18,11 @@ from endpoints.home import home
 from endpoints.measurement import measurement_blueprint
 from endpoints.python import tutorial_blueprint
 from endpoints.youtube import YOUTUBE_URLS, youtube_blueprint
-from models.base import User, db
+from models.base import User, db, get_session
+from services.user_service_ import UserService
+
+if TYPE_CHECKING:
+    from sqlalchemy.orm import Session
 
 DATABASES = {}
 if "RDS_HOSTNAME" in os.environ:
@@ -89,10 +94,11 @@ def create_app() -> Flask:  # noqa: C901
 
     db.init_app(application)
     db.create_all()
-    if db.session.execute(select(User).where(User.username == "admin")).scalar_one_or_none() is None:
-        user = User(username="admin", password=os.getenv("CDS_SECRET_KEY", "admin"))
-        db.session.add(user)
-        db.session.commit()
+    session: Session
+    with get_session()() as session:
+        user_service = UserService(session)
+        if user_service.get_user_by_username("admin") is None:
+            user_service.save_user(username="admin", password=os.getenv("CDS_SECRET_KEY", "admin"))
 
     init_admin(application)
     application.config["FLASK_ADMIN_SWATCH"] = "cerulean"
@@ -104,8 +110,9 @@ def create_app() -> Flask:  # noqa: C901
 
     @login_manager.user_loader
     def load_user(user_id: str) -> User:
-        stmt = select(User).where(User.id == int(user_id))
-        return db.session.execute(stmt).scalar_one()
+        with get_session()() as session:
+            user_service = UserService(session)
+            return user_service.get_user_by_id(user_id=int(user_id))
 
     @application.errorhandler(404)
     def not_found(e) -> str:  # noqa: ANN001, ARG001
@@ -124,8 +131,9 @@ def create_app() -> Flask:  # noqa: C901
         username = request.form.get("username")
         password = request.form.get("password")
         remember = bool(request.form.get("remember"))
-
-        user = db.session.execute(select(User).where(User.username == username)).scalar_one()
+        with get_session()() as session:
+            user_service = UserService(session)
+            user = user_service.get_user_by_username(username=username)
 
         # check if the user actually exists
         # take the user-supplied password, hash it, and compare it to the hashed password in the database

@@ -9,8 +9,8 @@ class BaseRepository:
         self.session = session
 
     def get_by_id(self, entity: BaseModel, entity_id: int) -> BaseModel:
-        stmt = select(entity).where(entity.id == entity_id)
-        return self.session.execute(stmt).scalar()
+        # https://docs.sqlalchemy.org/en/20/orm/session_basics.html#get-by-primary-key
+        return self.session.get(entity, entity_id)
 
     def get_all(self, entity: BaseModel) -> list[BaseModel]:
         stmt = select(entity)

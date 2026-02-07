@@ -8,18 +8,22 @@ from markupsafe import Markup
 from sqlalchemy import select
 
 from admin.base import AethModelView
-from models.base import db
+from models.base import get_session
 from models.shop import Shop
 
 if TYPE_CHECKING:
     from collections.abc import Callable
 
+    from sqlalchemy.orm import Session
+
     from models.basket import Basket
 
 
 def get_shops_choices() -> list[tuple]:
-    shops = db.session.execute(select(Shop)).scalars()
-    return [(shops.id, shops.label) for shops in shops]
+    session: Session
+    with get_session()() as session:
+        shops = session.execute(select(Shop)).scalars()
+        return [(shops.id, shops.label) for shops in shops]
 
 
 class BasketAdminView(AethModelView):

@@ -4,10 +4,14 @@ from typing import Annotated
 
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, Session, mapped_column, sessionmaker
 
 db = SQLAlchemy()
 intpk = Annotated[int, mapped_column(primary_key=True)]
+
+
+def get_session() -> Session:
+    return sessionmaker(db.engine)
 
 
 class BaseModel(db.Model):

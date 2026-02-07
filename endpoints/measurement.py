@@ -6,9 +6,8 @@ from flask_babel import gettext
 from flask_pydantic import validate
 from retry import retry
 from sqlalchemy.exc import OperationalError
-from sqlalchemy.orm import Session
 
-from models.base import db
+from models.base import get_session
 from schemas.measurement import MeasurementSchema
 from services.measurement_service import MeasurementService
 
@@ -25,7 +24,7 @@ measurement_blueprint = Blueprint("measurement_blueprint", __name__)
 @retry(OperationalError, tries=10, delay=1)
 def measurement_create(body: MeasurementSchema) -> (tuple[dict[str, Any], Literal[201]] | None):
     if request.method == "POST":
-        with Session(db.engine) as session:
+        with get_session()() as session:
             measurement_service = MeasurementService(session)
             new_measurement = measurement_service.save_measurement(body)
 
@@ -46,7 +45,7 @@ def measurement_create(body: MeasurementSchema) -> (tuple[dict[str, Any], Litera
 @retry(OperationalError, tries=10, delay=1)
 def measurements() -> str:
     # date_debut, date_fin, granularité/step (default=10min, sinon heure, demi journée, journée, semaine, mois, an)
-    with Session(db.engine) as session:
+    with get_session()() as session:
         measurement_service = MeasurementService(session)
         datas = measurement_service.get_last_measurements()
         t = []
