@@ -3,10 +3,9 @@ from __future__ import annotations
 from datetime import datetime
 
 from flask import Blueprint, Response, current_app, jsonify, render_template, request, url_for
-from sqlalchemy.orm import Session
 
 from cds.services.member_service import MemberService
-from models.base import db
+from models.base import get_session
 from utils.datetime_tools import TIMEZONE
 
 members_blueprint = Blueprint("members_blueprint", __name__)
@@ -49,7 +48,7 @@ def get_members() -> tuple[Response, int]:
         return jsonify({"error": "Offset must be non-negative"}), 400
 
     try:
-        with Session(db.engine) as session:
+        with get_session()() as session:
             member_service = MemberService(session)
             members = member_service.get_members(year=year, limit=limit, offset=offset)
             total_members = member_service.get_members_count(year=year)
