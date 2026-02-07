@@ -227,6 +227,11 @@ class Member2026ListView(Member2023ListView):
 
 
 class MemberToContact2022(CdsModelView):
+    can_create = False
+    can_delete = False
+    
+    form_columns = ("confirmed_departure", "mail_sent")
+    
     column_list = (
         "name",
         "email",
