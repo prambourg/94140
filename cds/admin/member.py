@@ -274,7 +274,7 @@ class MemberToContact2022(CdsModelView):
             Member.subscriptions.any(Subscription.campagne == "2022"),
             ~Member.subscriptions.any(Subscription.campagne == "2023"),
             Member.confirmed_departure.is_(False),
-        )
+        ).distinct()
 
     def get_count_query(self) -> Query:
         return self.get_query().with_entities(
@@ -321,7 +321,7 @@ class MemberToContact2021(MemberToContact2022):
             ~Member.subscriptions.any(Subscription.campagne == "2022"),
             ~Member.subscriptions.any(Subscription.campagne == "2023"),
             Member.confirmed_departure.is_(False),
-        )
+        ).distinct()
 
 
 class MemberToContact2020(MemberToContact2022):
@@ -333,7 +333,7 @@ class MemberToContact2020(MemberToContact2022):
             ~Member.subscriptions.any(Subscription.campagne == "2022"),
             ~Member.subscriptions.any(Subscription.campagne == "2023"),
             Member.confirmed_departure.is_(False),
-        )
+        ).distinct()
 
 
 class MemberToContact2023(MemberToContact2022):
@@ -345,7 +345,7 @@ class MemberToContact2023(MemberToContact2022):
             Member.subscriptions.any(Subscription.campagne == "2023"),
             ~Member.subscriptions.any(Subscription.campagne == "2024"),
             Member.confirmed_departure.is_(False),
-        )
+        ).distinct()
 
 
 class MemberToContact2025(MemberToContact2022):
@@ -359,4 +359,4 @@ class MemberToContact2025(MemberToContact2022):
             Member.subscriptions.any(Subscription.campagne == "2024"),
             ~Member.subscriptions.any(Subscription.campagne == "2025"),
             Member.confirmed_departure.is_(False),
-        )
+        ).distinct()
