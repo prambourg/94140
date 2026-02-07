@@ -341,3 +341,17 @@ class MemberToContact2023(MemberToContact2022):
             ~Member.subscriptions.any(Subscription.campagne == "2024"),
             Member.confirmed_departure.is_(False),
         )
+
+
+class MemberToContact2025(MemberToContact2022):
+    page_size = 200
+
+    can_export = True
+
+    @staticmethod
+    def get_query() -> Query:
+        return Member.query.join(Subscription).filter(
+            Member.subscriptions.any(Subscription.campagne == "2024"),
+            ~Member.subscriptions.any(Subscription.campagne == "2025"),
+            Member.confirmed_departure.is_(False),
+        )

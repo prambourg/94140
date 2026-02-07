@@ -9,6 +9,7 @@ from cds.admin.member import (
     MemberToContact2021,
     MemberToContact2022,
     MemberToContact2023,
+    MemberToContact2025,
     MemberView,
 )
 from cds.admin.subscription import HelloAssoView
@@ -68,6 +69,15 @@ def init_cds_admin(admin: Admin) -> None:
             Member,
             db.session,
             name="Liste des membres détaillée",
+            category=CDS_CATEGORY,
+        ),
+    )
+    admin.add_view(
+        MemberToContact2025(
+            Member,
+            db.session,
+            name="A relancer 2025",
+            endpoint="membresRelance2025",
             category=CDS_CATEGORY,
         ),
     )
