@@ -3,9 +3,11 @@ from __future__ import annotations
 from datetime import datetime
 
 from flask import Blueprint, Response, current_app, jsonify, render_template, request, url_for
+from flask_login import current_user, login_required
 from sqlalchemy.orm import Session
 
 from cds.services.member_service import MemberService
+from cds.utils.hello_asso import process
 from models.base import db
 from utils.datetime_tools import TIMEZONE
 
@@ -89,9 +91,42 @@ def welcome() -> str:
         "Python": {"label": "Python", "url": url_for("tutorial_blueprint.tutorial")},
     }
 
+    is_admin = current_user.is_authenticated and current_user.username == "admin"
+
     site_data = {
         "site": site,
         "owner": owner,
         "navbar": navbar,
+        "is_admin": is_admin,
     }
     return render_template("index2.html", **site_data)
+
+
+@members_blueprint.route("/sync_members", methods=["POST"])
+@login_required
+def sync_members() -> tuple[Response, int]:
+    """Synchronize members from HelloAsso.
+
+    Only accessible by admin users.
+
+    Returns:
+        tuple[Response, int]: JSON response containing:
+            - success (bool): Whether the synchronization was successful.
+            - message (str): Success or error message.
+
+    """
+    if not current_user.is_authenticated or current_user.username != "admin":
+        return jsonify({"success": False, "message": "Accès non autorisé"}), 403
+
+    try:
+        process()
+        return (
+            jsonify({"success": True, "message": "Synchronisation réussie"}),
+            200,
+        )
+    except Exception as e:
+        current_app.logger.exception("Erreur lors de la synchronisation: %s", e)
+        return (
+            jsonify({"success": False, "message": "Erreur lors de la synchronisation"}),
+            500,
+        )

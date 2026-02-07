@@ -18,10 +18,13 @@ Vue.component('my-nav-bar', {
   });
   
   Vue.component('my-hero', {
+    props: ['isAdmin'],
     data: function() {
         return  {
             members: [],
             selectedYear: 2025,
+            syncing: false,
+            syncMessage: '',
         }
     },
     methods: {
@@ -39,13 +42,47 @@ Vue.component('my-nav-bar', {
             this.selectedYear = event.target.value;
             this.getMembers();
         },
+        syncMembers() {
+            this.syncing = true;
+            this.syncMessage = '';
+            const path = window.location.origin + '/sync_members';
+            axios.post(path)
+              .then((res) => {
+                this.syncing = false;
+                this.syncMessage = res.data.message;
+                // Refresh the members list after sync
+                this.getMembers();
+                // Clear message after 5 seconds
+                setTimeout(() => {
+                  this.syncMessage = '';
+                }, 5000);
+              })
+              .catch((error) => {
+                this.syncing = false;
+                this.syncMessage = error.response?.data?.message || 'Erreur lors de la synchronisation';
+                console.error(error);
+                // Clear error message after 5 seconds
+                setTimeout(() => {
+                  this.syncMessage = '';
+                }, 5000);
+              });
+        },
     },
     created() {
         this.getMembers();
     },
     template: `
         <div class="jumbotron container my-5 p-4 bg-light border rounded shadow">
-            <h1 class="display-4 text-success">Liste des membres du Café des Sciences</h1>
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="display-4 text-success">Liste des membres du Café des Sciences</h1>
+                <button v-if="isAdmin" @click="syncMembers" :disabled="syncing" class="btn btn-primary">
+                    <span v-if="syncing" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                    {{ syncing ? 'Synchronisation...' : 'Sync' }}
+                </button>
+            </div>
+            <div v-if="syncMessage" :class="['alert', syncMessage.includes('Erreur') ? 'alert-danger' : 'alert-success', 'mt-3']" role="alert">
+                {{ syncMessage }}
+            </div>
             <p class="lead text-secondary">Sélectionnez une année pour voir les membres à jour pour cette période.</p>
             <hr class="my-4" />
             <div class="mb-4">

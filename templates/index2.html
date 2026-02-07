@@ -7,7 +7,7 @@
 <body>
     <div id="app">
         <my-nav-bar :site="{{ site }}" :navbar="{{ navbar }}"></my-nav-bar>
-        <my-hero></my-hero>
+        <my-hero :is-admin="{{ is_admin|tojson }}"></my-hero>
         <my-footer :version="{{ site }}" :owner="{{ owner }}"></my-footer>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
