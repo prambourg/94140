@@ -19,6 +19,7 @@ from endpoints.measurement import measurement_blueprint
 from endpoints.python import tutorial_blueprint
 from endpoints.youtube import YOUTUBE_URLS, youtube_blueprint
 from models.base import User, db
+from utils.scheduler import init_scheduler
 
 load_dotenv()
 
@@ -166,6 +167,9 @@ def create_app() -> Flask:  # noqa: C901
     application.register_blueprint(youtube_blueprint)
     application.register_blueprint(hello_asso_blueprint)
     application.register_blueprint(members_blueprint)
+
+    # Initialiser le scheduler pour les tâches automatiques
+    init_scheduler(application)
 
     return application
 

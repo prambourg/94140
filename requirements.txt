@@ -2,6 +2,8 @@
 #    uv pip compile pyproject.toml -o requirements.txt
 annotated-types==0.7.0
     # via pydantic
+apscheduler==3.11.2
+    # via flask-aws (pyproject.toml)
 babel==2.17.0
     # via flask-babel
 beartype==0.19.0
@@ -115,6 +117,10 @@ typing-extensions==4.12.2
     #   pydantic
     #   pydantic-core
     #   sqlalchemy
+tzdata==2025.3
+    # via tzlocal
+tzlocal==5.3.1
+    # via apscheduler
 urllib3==2.3.0
     # via requests
 werkzeug==3.1.3
