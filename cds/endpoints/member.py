@@ -67,8 +67,8 @@ def get_members() -> tuple[Response, int]:
                 "year": year,
             },
         }), 200
-    except Exception:
-        current_app.logger.exception("An error occurred while retrieving members: %s")
+    except Exception as e:
+        current_app.logger.exception("An error occurred while retrieving members: %s", str(e))
         return jsonify({"error": "Internal server error"}), 500
 
 
@@ -127,8 +127,8 @@ def sync_members() -> tuple[Response, int]:
             200,
         )
     except Exception as e:
-        current_app.logger.exception("Erreur lors de la synchronisation: %s", e)
+        current_app.logger.exception("Erreur lors de la synchronisation: %s", str(e))
         return (
-            jsonify({"success": False, "message": "Erreur lors de la synchronisation"}),
+            jsonify({"success": False, "message": f"Erreur lors de la synchronisation: {str(e)}"}),
             500,
         )
