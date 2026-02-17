@@ -29,10 +29,10 @@ Vue.component('my-nav-bar', {
     },
     methods: {
         getMembers() {
-          const path = window.location.origin + '/members?year=' + this.selectedYear;
+          const path = window.location.origin + '/members/?year=' + this.selectedYear;
           axios.get(path)
             .then((res) => {
-              this.members = res.data.members;console.log(res.data)
+              this.members = res.data.members;
             })
             .catch((error) => {
               console.error(error);
