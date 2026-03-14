@@ -138,10 +138,13 @@ class Member2023ListView(CdsModelView):
     can_edit = False
     can_delete = False
     can_view_details = False
+    can_export = True
+
+    column_export_list = ("name", "email")
 
     column_default_sort = "name"
 
-    column_list = ("name", "url")
+    column_list = ("name", "url", "email")
 
     column_labels: ClassVar[dict[str, str]] = {"name": "Pseudo", "url": "Liens des contenus"}
 
