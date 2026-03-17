@@ -228,6 +228,20 @@ class Member2026ListView(Member2023ListView):
             .filter(Member.confirmed_departure.is_(False))
         )
 
+class PetitFilousListView(Member2023ListView):
+    @staticmethod
+    def get_query() -> Query:
+        return (
+            Member.query.join(
+                Subscription, Subscription.member_id == Member.id,
+            )
+            .filter(
+                Member.subscriptions.any(Subscription.campagne == "2024"),
+                ~Member.subscriptions.any(Subscription.campagne == "2025"),
+                Member.subscriptions.any(Subscription.campagne == "2026")
+            )
+            .filter(Member.confirmed_departure.is_(False))
+        )
 
 class MemberToContact2022(CdsModelView):
     can_create = False

@@ -11,6 +11,7 @@ from cds.admin.member import (
     MemberToContact2023,
     MemberToContact2025,
     MemberView,
+    PetitFilousListView,
 )
 from cds.admin.subscription import HelloAssoView
 from cds.models.member import Member
@@ -61,6 +62,15 @@ def init_cds_admin(admin: Admin) -> None:
             db.session,
             name="Liste des membres publique 2026",
             endpoint="liste_membres_2026",
+            category=CDS_CATEGORY,
+        ),
+    )
+    admin.add_view(
+        PetitFilousListView(
+            Member,
+            db.session,
+            name="Petits filous",
+            endpoint="petits_filous",
             category=CDS_CATEGORY,
         ),
     )
