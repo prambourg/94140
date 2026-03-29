@@ -36,7 +36,7 @@ flask-admin==1.6.1
     # via flask-aws (pyproject.toml)
 flask-babel==4.0.0
     # via flask-aws (pyproject.toml)
-flask-cors==5.0.0
+flask-cors==5.0.1
     # via flask-aws (pyproject.toml)
 flask-login==0.6.3
     # via flask-aws (pyproject.toml)
